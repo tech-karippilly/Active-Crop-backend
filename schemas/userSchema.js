@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import bycrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
 
 const userSchema = mongoose.Schema({
     firstName:{
@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema({
     phone: { type: String, required: true },
     password: { type: String, required: true },
     isBlocked: { type: Boolean, default: false },
+    isVerifyed:{type:Boolean,default:false},
     role: { type: Schema.Types.ObjectId, ref: 'Role', required: true }
 })
 
