@@ -9,7 +9,7 @@ async function createUser(req,res){
 
     try{
 
-        const userRole = await Role.findOne({ roleName:'SuperAdmin' });
+        const userRole = await Role.findOne({ roleName:'User' });
         const user ={
             firstName,
             lastName,
