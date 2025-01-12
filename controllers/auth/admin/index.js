@@ -45,7 +45,25 @@ async function adminLogin(req,res){
 }
 
 async function adminLogout(req,res){
-    res.status(200).send('working')
+    try{
+
+        const access_token = req.headers['authorization'].split(' ')[1]
+        const refreh_token = req.headers['refresh_token']
+
+        const result = await Token.deleteOne({access_token:access_token})
+
+        if(result.deletedCount === 1){
+            return res.status(200).json({message:"Logout Successfully ...."})
+        }else{
+            return res.status(400).json({message:"Error in Token"})
+        }
+
+        
+    }catch(error){
+        console.log("Error in logout",error.message)
+        res.status(500).json({message:"Internal server Error"})
+    }
+
 }
 
 
