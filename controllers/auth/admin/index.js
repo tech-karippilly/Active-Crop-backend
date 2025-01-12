@@ -5,21 +5,22 @@ dotenv.config();
 
 async function adminLogin(req,res){   
     try{
+        
         const {email,password} = req.body
-
+        console.log(req.body)
         const user = await User.findOne({email})
 
         if(!user){
-            return res.status(404).json({message:"User Not found"})
+            return res.status(404).json({message:"User Not found",status:404})
         }
 
         if(!user.isVerifyed){
-            return res.status(403).json({message:"User is not verified"})
+            return res.status(403).json({message:"User is not verified",status:403})
         }
         const isPasswordValid = await user.comparePassword(password)
 
         if(!isPasswordValid){
-            return res.status(400).json({message:"Invalid email or password"})
+            return res.status(400).json({message:"Invalid email or password",status:400})
         }
 
         const accessToken = jwt.sign(
@@ -37,7 +38,7 @@ async function adminLogin(req,res){
           const token = new Token({userId: user._id,access_token:accessToken,refresh_token:refreshToken})
           await token.save()
 
-          res.status(200).json({message:"Login sucessful",access_token:accessToken,refresh_token:refreshToken})
+          res.status(200).json({message:"Login sucessful",access_token:accessToken,refresh_token:refreshToken,status:200})
     }catch(error){
         console.log('Error',error.message)
         res.status(500).json({message:"Internal Server Error"})

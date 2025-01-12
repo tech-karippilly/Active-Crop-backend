@@ -28,4 +28,18 @@ const mailSender = async (email, title, body) => {
     }
   };
 
+  export async function sendresetMail(email, link) {
+    try {
+      const mailResponse = await mailSender(
+        email,
+        "Reset Email",
+        `<h1>Please click on the Link below </h1>
+         <p>here is the link ${link}</p>`
+      );
+    } catch (error) {
+      console.log("Error occurred while sending email: ", error);
+      throw error;
+    }
+  }
+
   export default mailSender
