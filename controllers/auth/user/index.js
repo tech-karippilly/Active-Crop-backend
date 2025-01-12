@@ -20,7 +20,7 @@ async function loginUser(req,res){
         }
 
         if(!user.isVerifyed){
-            return res.status(403).json({message:"Users Not Verifyed",status:404})
+            return res.status(403).json({message:"Users Not Verifyed",status:403})
         }
 
         const isPasswordValid = await user.comparePassword(password)

@@ -7,7 +7,6 @@ async function adminLogin(req,res){
     try{
         
         const {email,password} = req.body
-        console.log(req.body)
         const user = await User.findOne({email})
 
         if(!user){

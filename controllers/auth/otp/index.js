@@ -4,14 +4,15 @@ import moment from "moment/moment.js"
 
 async function sendOtp(req, res) {
     try {
-        const { email } = req.body
+        const { userName } = req.body
 
-        const checkUser = await User.findOne({ email })
+        const checkUser = await User.findOne({ userName })
 
         if (!checkUser) {
-            return res.status(401).send('User Not Found')
+            return res.status(401).json({message:'User Not Found',status:401})
         }
 
+    
         let otp = otpGenerator.generate(6, {
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
@@ -25,6 +26,7 @@ async function sendOtp(req, res) {
             })
             result = await OTPModel.findOne({ otp: otp });
         }
+        const email = checkUser.email
         const otpPayload = { email, otp };
         const otpBody = new OTPModel(otpPayload);
 
@@ -32,20 +34,21 @@ async function sendOtp(req, res) {
         res.status(200).json({
             message: 'OTP sent successfully',
             otp,
+            status:200
         });
-
+       
     } catch (error) {
         console.log("error", error.message)
-        res.status(500).send('Internal server Error')
+        res.status(500).json({message:'Internal server Error',status:500})
     }
 }
 
 async function resendOtp(req, res) {
     
     try {
-        const { email } = req.body
+        const { userName } = req.body
 
-        const checkUser = await User.findOne({ email })
+        const checkUser = await User.findOne({ userName })
 
         if (!checkUser) {
             return res.status(401).send('User Not Found')
@@ -87,7 +90,7 @@ async function verifyOtp(req, res) {
         const getOtp = await OTPModel.findOne({ otp })
         
         if(!getOtp){
-            return res.status(404).json({ message: 'OTP record not found' });
+            return res.status(404).json({ message: 'OTP record not found' ,status:404});
         }
 
         const otpExpires = 5
@@ -96,14 +99,14 @@ async function verifyOtp(req, res) {
         const expiryTime = createdAt.add(otpExpires, 'minutes');
 
         if (currentTime.isAfter(expiryTime)) {
-            return res.status(400).json({ message: "In valid OTP" })
+            return res.status(400).json({ message: "In valid OTP" ,status:400})
         }
         const user  = await User.findOne({email:getOtp.email})
 
         user.isVerifyed =true
         await  user.save()
 
-        return res.status(200).json({ message: 'OTP verified successfully' });
+        return res.status(200).json({ message: 'OTP verified successfully' ,status:200});
     } catch (error) {
         res.status(500).send('Internal server Error')
     }
