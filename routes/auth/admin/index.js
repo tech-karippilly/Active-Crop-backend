@@ -3,10 +3,6 @@ import { adminLogin, adminLogout } from "../../../controllers/auth/admin/index.j
 
 const route = express.Router()
 
-route.get('/',(req,res)=>{
-    res.status(200).send('workingroute ')
-})
-
 
 route.post('/login',adminLogin)
 route.get('/logout',adminLogout)
