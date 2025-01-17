@@ -5,6 +5,7 @@ import { forgotEmailSend, forgotPassword, loginPageUser, OtpVerify, signUp } fro
 import { catagoeryPage, createCatagoeryPage, updateCatagoeryPage } from "../../controllers/categoery/index.js";
 import { createProductPage, productPage, updateProductPage } from "../../controllers/products/index.js";
 import { createCustomerPage, customerPage, updateCustomerPage } from "../../controllers/customer/index.js";
+import { userHomePage } from "../../controllers/user/home/index.js";
 
 const route = express.Router()
 
@@ -33,5 +34,6 @@ route.get('/user/forogotEmailSendPage',forgotEmailSend)
 route.get('/user/forogotPasswordPage',forgotPassword)
 route.get('/user/otpVerifyPage',OtpVerify)
 
+route.get('/home',userHomePage)
 
 export default route

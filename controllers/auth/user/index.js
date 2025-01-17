@@ -129,6 +129,10 @@ async function resetPassword(req,res){
     }
 }
 
+ const googelAuth  = async (req,res)=>{
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code&scope=profile email`
+    res.redirect(url);
+}
 
 
 export {
@@ -136,5 +140,6 @@ export {
     loginUser,
     createUser,
     forgotEmailSend,
-    resetPassword
+    resetPassword,
+    googelAuth
 }

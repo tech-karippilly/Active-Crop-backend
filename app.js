@@ -2,7 +2,6 @@ import express from "express";
 import cors from 'cors'
 import ConnectDb from "./config/db.js";
 import dotenv from 'dotenv';
-import session from 'express-session'
 import { fileURLToPath } from 'url';
 import path from 'path';
 import session from 'express-session'
@@ -18,7 +17,7 @@ import categoeryRoute from './routes/catagoery/index.js'
 import productRoute from './routes/products/index.js'
 import dashboardRoute from './routes/dashboard/index.js'
 import pageRoute from './routes/page/index.js'
-
+import customerRoute from './routes/customer/index.js'
 const app = express()
 
 ConnectDb()
@@ -59,6 +58,7 @@ app.use('/api/auth/token', tokenRoute)
 
 app.use('/api/categoery', categoeryRoute)
 app.use('/api/products', productRoute)
+app.use('/api/customer',customerRoute)
 app.use('/api/admin/dashboard',dashboardRoute)
 
 app.use(session({
@@ -85,6 +85,7 @@ app.use('/api/products', productRoute)
 
 app.use('/api/admin/dashboard',dashboardRoute)
 
-app.use('/page/',pageRoute)
+
+app.use('/page',pageRoute)
 
 export default app
