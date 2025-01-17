@@ -3,6 +3,11 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 dotenv.config();
 
+
+function loginPage (req,res){
+    res.status(200).render('admin/auth/loginPage',{ alertMessage: '', alertType: '', redirectUrl: '' })
+}
+
 async function adminLogin(req,res){   
     try{
         
@@ -10,16 +15,16 @@ async function adminLogin(req,res){
         const user = await User.findOne({email})
 
         if(!user){
-            return res.status(404).json({message:"User Not found",status:404})
+            return res.status(404).render('admin/auth/loginPage',{ alertMessage: 'User not Found', alertType: 'danger', redirectUrl: '' })
         }
 
         if(!user.isVerifyed){
-            return res.status(403).json({message:"User is not verified",status:403})
+            return res.status(403).render('admin/auth/loginPage',{ alertMessage: 'User is not verifyed', alertType: 'warnning', redirectUrl: '' })
         }
         const isPasswordValid = await user.comparePassword(password)
 
         if(!isPasswordValid){
-            return res.status(400).json({message:"Invalid email or password",status:400})
+            return res.status(400).render('admin/auth/loginPage',{ alertMessage: 'Invalid Password or UserName', alertType: 'danger', redirectUrl: '' })
         }
 
         const accessToken = jwt.sign(
@@ -36,11 +41,12 @@ async function adminLogin(req,res){
 
           const token = new Token({userId: user._id,access_token:accessToken,refresh_token:refreshToken})
           await token.save()
-
-          res.status(200).json({message:"Login sucessful",access_token:accessToken,refresh_token:refreshToken,status:200})
+          req.session.accessToken = accessToken;
+          req.session.refreshToken = refreshToken;
+          res.status(200).render('admin/auth/loginPage',{ alertMessage: 'Login Successfull', alertType: 'sucess', redirectUrl: '/page/dashboard' })
     }catch(error){
         console.log('Error',error.message)
-        res.status(500).json({message:"Internal Server Error"})
+        res.status(500).render('admin/auth/loginPage',{ alertMessage: 'Internal sever error', alertType: 'danger', redirectUrl: '' })
     }
 }
 
@@ -67,4 +73,4 @@ async function adminLogout(req,res){
 }
 
 
-export {adminLogin,adminLogout}
+export {loginPage,adminLogin,adminLogout}
