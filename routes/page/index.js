@@ -12,7 +12,7 @@ const route = express.Router()
 
 
 route.get('/',loginPage)
-route.get('/',dasboardPage)
+route.get('/dashboard',dasboardPage)
 
 route.get('/admin/catagoery',catagoeryPage)
 route.get('/admin/createCategoery',createCatagoeryPage)
