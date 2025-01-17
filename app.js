@@ -2,7 +2,7 @@ import express from "express";
 import cors from 'cors'
 import ConnectDb from "./config/db.js";
 import dotenv from 'dotenv';
-
+import session from 'express-session'
 import roleAuth from './routes/roles/index.js'
 import adiminAuthRoute from './routes/auth/admin/index.js'
 import userRoute from './routes/auth/user/index.js'
@@ -29,8 +29,6 @@ app.use('/api/otp/',otpRoute)
 app.use('/api/auth/token',tokenRoute)
  
 
-<<<<<<< Updated upstream
-=======
 app.use(session({
     secret: 'user-management',
     resave: false,
@@ -56,6 +54,5 @@ app.use('/api/products', productRoute)
 app.use('/api/admin/dashboard',dashboardRoute)
 
 app.use('/page/',pageRoute)
->>>>>>> Stashed changes
 
 export default app

@@ -34,7 +34,7 @@ export const updateProduct = async (req,res)=>{
         const product_id = req.params.id
         const {product_name,description,price,stock_quentity,catagoery_id} = req.body
 
-        const productDetails = await Product.findById(prduct_id);
+        const productDetails = await Product.findById(product_id);
 
         let product_images ={}
         for(var i=0;i<req.files.length;i++){
