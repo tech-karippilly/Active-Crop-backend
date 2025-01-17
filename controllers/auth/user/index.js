@@ -93,7 +93,7 @@ async function forgotEmailSend(req,res){
             return res.status(404).json({ message: 'User not Found' ,status:404});
         }
 
-        const forgotPasswrodPage = `http://127.0.0.1:5500/Active-crop-frontend/App/Auth/forgotPassword.html?email=${email}`
+        const forgotPasswrodPage = `http://localhost:3000/page/user/forogotPasswordPage?email=${email}`
 
         sendresetMail(email,forgotPasswrodPage)
         res.status(200).json({message:"Email send sucessfully",status:200})
@@ -129,6 +129,10 @@ async function resetPassword(req,res){
     }
 }
 
+ const googelAuth  = async (req,res)=>{
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}&response_type=code&scope=profile email`
+    res.redirect(url);
+}
 
 
 export {
@@ -136,5 +140,6 @@ export {
     loginUser,
     createUser,
     forgotEmailSend,
-    resetPassword
+    resetPassword,
+    googelAuth
 }
