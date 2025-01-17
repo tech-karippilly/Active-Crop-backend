@@ -1,5 +1,16 @@
 import { Product } from "../../models/index.js"
 
+export const createProductPage = (req,res)=>{
+    res.status(200).render('admin/products/create',{ alertMessage: '', alertType: '', redirectUrl: '' })
+}
+
+export const productPage =(req,res)=>{
+    res.status(200).render('admin/products/index',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+}
+export const updateProductPage =(req,res)=>{
+    res.status(200).render('admin/products/update',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+}
+
 export const createProducts = async (req,res)=>{
     try{
         let product_images ={}
@@ -18,14 +29,34 @@ export const createProducts = async (req,res)=>{
     }
 }
 
-export const updateProduct = (req,res)=>{
+export const updateProduct = async (req,res)=>{
     try{
+        const product_id = req.params.id
+        const {product_name,description,price,stock_quentity,catagoery_id} = req.body
 
+        const productDetails = await Product.findById(prduct_id);
+
+        let product_images ={}
+        for(var i=0;i<req.files.length;i++){
+            product_images[i] =req.files[i].path
+        }
+        if (productDetails) {
+            productDetails.product_name = product_name
+            productDetails.description = description
+            productDetails.price = price
+            productDetails.stock_quentity = stock_quentity
+            productDetails.catagoery_id = catagoery_id
+            productDetails.images = product_images
+            await productDetails.save()
+           return res.status(200).json({ message: "Product Updated Successfully", status: 200 })
+        }
+        res.status(404).json({ message: 'Product not found', statis: 404 })
     }catch(error){
         console.log('Error in Create Products',error.message)
         res.status(500).json({message:"Internal Server Error",status:500})
     }
 }
+
 export const deleteProduct = async (req,res)=>{
     try{
         const product_id = req.params.id
