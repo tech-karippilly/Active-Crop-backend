@@ -2,6 +2,17 @@ import { Categoery } from '../../models/index.js'
 import dotenv from 'dotenv';
 dotenv.config();
 
+export const createCatagoeryPage = (req,res)=>{
+    res.status(200).render('admin/categoery/create',{ alertMessage: '', alertType: '', redirectUrl: '' })
+}
+
+export const catagoeryPage =(req,res)=>{
+    res.status(200).render('admin/categoery/index',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+}
+export const updateCatagoeryPage =(req,res)=>{
+    res.status(200).render('admin/categoery/update',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+}
+
 const getCategoery = async (req, res) => {
     try {
 
