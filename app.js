@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import session from 'express-session'
 import { fileURLToPath } from 'url';
 import path from 'path';
-import session from 'express-session'
+
 
 dotenv.config();
 
