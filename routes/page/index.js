@@ -26,8 +26,6 @@ route.get('/admin/customer',customerPage)
 route.get('/admin/createCustomer',createCustomerPage)
 route.get('/admin/updateCustomer',updateCustomerPage)
 
-
-
 route.get('/user/loginPage',loginPageUser)
 route.get('/user/signupPage',signUp)
 route.get('/user/forogotEmailSendPage',forgotEmailSend)

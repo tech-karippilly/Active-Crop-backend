@@ -93,7 +93,7 @@ async function forgotEmailSend(req,res){
             return res.status(404).json({ message: 'User not Found' ,status:404});
         }
 
-        const forgotPasswrodPage = `http://127.0.0.1:5500/Active-crop-frontend/App/Auth/forgotPassword.html?email=${email}`
+        const forgotPasswrodPage = `http://localhost:3000/page/user/forogotPasswordPage?email=${email}`
 
         sendresetMail(email,forgotPasswrodPage)
         res.status(200).json({message:"Email send sucessfully",status:200})
