@@ -23,7 +23,7 @@
 
 <body>
 
-    <div class="alert-box alert-box-hide" id="alert-box">
+    <div class="alert-box" id="alert-box">
         <% if (alertMessage) { %>
             <div class="alert alert-<%= alertType %>" id="alert">
                 <%= alertMessage %>
@@ -37,10 +37,10 @@
             <div class="card-body">
                 <h5 class="card-title text-center">Login</h5>
 
-                <form id="login-form" method="post" action="/admin/auth/login">
+                <form id="login-form" method="post" action="/api/admin/auth/login">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label lable-text">Email address</label>
-                        <input type="email" class="form-control" name="userEmail" id="exampleInputEmail1"
+                        <input type="email" class="form-control" name="email" id="exampleInputEmail1"
                             aria-describedby="emailHelp">
 
                     </div>
@@ -68,6 +68,7 @@
 
         const redirectUrl = "<%= redirectUrl %>";
         if (redirectUrl && redirectUrl.trim() !== "") {
+            console.log(redirectUrl)
             setTimeout(() => {
                 window.location.href = redirectUrl;
             }, 2000)

@@ -1,5 +1,5 @@
 import express from "express";
-import { loginPage } from "../../controllers/auth/admin/index.js";
+import { createpage, loginPage } from "../../controllers/auth/admin/index.js";
 import { dasboardPage } from "../../controllers/dashboard/index.js";
 import { forgotEmailSend, forgotPassword, loginPageUser, OtpVerify, signUp } from "../../controllers/user/auth/index.js";
 import { catagoeryPage, createCatagoeryPage, updateCatagoeryPage } from "../../controllers/categoery/index.js";
@@ -11,6 +11,7 @@ const route = express.Router()
 
 
 route.get('/',loginPage)
+route.get('/create-admin',createpage)
 route.get('/',dasboardPage)
 
 route.get('/admin/catagoery',catagoeryPage)
