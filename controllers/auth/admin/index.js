@@ -1,6 +1,7 @@
 import { Role, Token, User } from '../../../models/index.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
+import session from 'express-session'
 import { ADMIN_DASHBOARD, ADMIN_LOGIN } from '../../../constans/index.js';
 dotenv.config();
 
@@ -19,14 +20,13 @@ async function createAdmin(req, res) {
         const { firstName, lastName, userEmail, password, userName,phone, confirmPassword } = req.body
        
         const userRole = await Role.findOne({ roleName: 'SuperAdmin' });
-        console.log('userRole',userRole)
-
+        
         const existingUser = await User.findOne({ $or: [{ userName }, { email:userEmail }] });
         
         if (existingUser) {
             return res.render('admin/auth/signupPage', { alertMessage: 'Username or email already exists', alertType: 'danger', redirectUrl: '' })
         }
-        console.log('existingUser',existingUser)
+
         const user = {
             firstName,
             lastName,

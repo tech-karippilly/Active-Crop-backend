@@ -1,5 +1,5 @@
 import express from "express";
-import { createCategoery, deletCategoery, getCategoery, updateCategoery } from "../../controllers/categoery/index.js";
+import { createCatagoeryPage, createCategoery, deletCategoery, getCategoery, searchCategoery, updateCatagoeryPage, updateCategoery } from "../../controllers/categoery/index.js";
 import multer from 'multer'
 import fs from 'fs';
 const route = express.Router()
@@ -18,11 +18,14 @@ var storage = multer.diskStorage({
     }
 })
  const upload = multer({ storage: storage })
-
+ 
 route.get('/',getCategoery)
+route.get('/createCategoery',createCatagoeryPage)
 route.post('/createCategoery',upload.single('categoery_image'),createCategoery)
+route.get('/:id',updateCatagoeryPage)
 route.put('/:id',upload.single('categoery_image'),updateCategoery)
 route.delete('/:id',deletCategoery)
+route.get('/search',searchCategoery)
 
 
 

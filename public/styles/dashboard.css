@@ -86,4 +86,14 @@ body{
     align-items: center;
     padding: 2rem;
 }
+.alert-box{
+    width: auto;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
 

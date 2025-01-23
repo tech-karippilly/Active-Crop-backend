@@ -3,24 +3,24 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const createCatagoeryPage = (req,res)=>{
-    res.status(200).render('admin/categoery/create',{ alertMessage: '', alertType: '', redirectUrl: '' })
+    res.status(200).render('admin/categoery/create',{ alertMessage: '', alertType: '', redirectUrl: '',data:[] })
 }
 
 export const catagoeryPage =(req,res)=>{
-    res.status(200).render('admin/categoery/index',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+    res.status(200).render('admin/categoery/index',{ alertMessage: '', alertType: '', redirectUrl: '',data:[] }) 
 }
-export const updateCatagoeryPage =(req,res)=>{
-    res.status(200).render('admin/categoery/update',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
-}
+
 
 const getCategoery = async (req, res) => {
     try {
+        console.log('working')
 
         const catagoery = await Categoery.find({})
-        res.status(200).json({ catagoery, message: "Sucess", status: 200 })
+       
+        res.status(200).render('admin/categoery/index',{ alertMessage: '', alertType: '', redirectUrl: '',data:catagoery }) 
     } catch (error) {
         console.log("Error Catergoery create", error.message)
-        res.status(500).json({ message: "Internal Server Error", status: 500 })
+        res.status(500).render('admin/categoery/index',{ alertMessage: 'Internal Server Error', alertType: '', redirectUrl: '',data:catagoery }) 
     }
 }
 
@@ -33,7 +33,7 @@ const createCategoery = async (req, res) => {
         const cataDetails = await Categoery.findOne({ catagoery_name: cataName })
 
         if (cataDetails) {
-            return res.status(409).json({ message: 'Categoery Already Exists', status: 409 })
+            return  res.status(409).render('admin/categoery/create',{ alertMessage: 'Categoery Already Exits', alertType: 'warnning', redirectUrl: '',}) 
         }
 
         const filePath = JSON.parse(JSON.stringify(req.file))
@@ -41,11 +41,25 @@ const createCategoery = async (req, res) => {
         const fileName = `${process.env.HOST_URL}/${filePath.path}`
         const catagoery = new Categoery({ catagoery_name: cataName, description: description, image: fileName })
         await catagoery.save()
-        res.status(201).json({ message: "Categoery Created Successfully", status: 201 })
+        res.status(201).render('admin/categoery/create',{ alertMessage: 'Categoery Created Successfully', alertType: 'success', redirectUrl: '/api/categoery', }) 
     } catch (error) {
         console.log("Error Catergoery create", error.message)
-        res.status(500).json({ message: "Internal Server Error", status: 500 })
+        res.status(500).render('admin/categoery/create',{ alertMessage: 'Internal Server error', alertType: 'danger', redirectUrl: '' }) 
     }
+}
+
+export const updateCatagoeryPage = async (req,res)=>{
+    try{
+      
+        const {id} = req.params
+       
+        const catagoery = await Categoery.findById({_id:id})
+        console.log('catagoery',catagoery)
+        res.status(200).render('admin/categoery/update',{ alertMessage: '', alertType: '', redirectUrl: '',data:catagoery }) 
+    }catch(error){
+       return res.status(500).render('admin/categoery/update',{ alertMessage: 'Internal server Error', alertType: 'danger', redirectUrl: '',data:[] }) 
+    }
+    
 }
 
 const updateCategoery = async (req, res) => {
@@ -64,9 +78,10 @@ const updateCategoery = async (req, res) => {
             cataDetails.image = fileName
 
             await cataDetails.save()
-           return res.status(200).json({ message: "Categoery Updated Successfully", status: 200 })
+            
+           return res.status(200).json({message:'Catagoery Updated Succssfully ' ,}) 
         }
-        res.status(404).json({ message: 'Catagoery not found', statis: 404 })
+        res.status(404).render('admin/categoery/update',{ alertMessage: 'Categoery Not  Found', alertType: 'Dnager', redirectUrl: '',data:{} }) 
     } catch (error) {
         console.log("Error Catergoery create", error.message)
         res.status(500).json({ message: "Internal Server Error", status: 500 })
@@ -91,5 +106,15 @@ const deletCategoery = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", status: 500 })
     }
 }
+const searchCategoery = async (req,res) =>{
+    try{
+        const {searchString} = req.query
+        console.log(searchString)
+        const catagoery = await Categoery.find({catagoery_name:{$regex: searchString, $options: 'i' }})
+        res.status(200).render('admin/categoery/index',{ alertMessage: '', alertType: '', redirectUrl: '',data:catagoery }) 
+    }catch(error){
+        res.status(500).render('admin/categoery/index',{ alertMessage: 'Internal Server Error', alertType: '', redirectUrl: '',data:catagoery }) 
+    }
+}
 
-export { createCategoery, getCategoery, updateCategoery, deletCategoery }
+export { createCategoery, getCategoery, updateCategoery, deletCategoery ,searchCategoery}

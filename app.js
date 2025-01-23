@@ -74,6 +74,7 @@ app.set('views', 'views')
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
+
 app.use('/api/admin/role', roleAuth)
 app.use('/api/admin/auth', adiminAuthRoute)
 app.use('/api/auth', userRoute)
@@ -86,5 +87,11 @@ app.use('/api/products', productRoute)
 app.use('/api/admin/dashboard',dashboardRoute)
 
 app.use('/page/',pageRoute)
+
+app.get('/',(req,res)=>{
+    // res.redirect('/page')
+    res.status(200).render('user/home/homePage')
+})
+
 
 export default app
