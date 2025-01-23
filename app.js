@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors'
 import ConnectDb from "./config/db.js";
 import dotenv from 'dotenv';
+import session from "express-session";
 import { fileURLToPath } from 'url';
 import path from 'path';
 
