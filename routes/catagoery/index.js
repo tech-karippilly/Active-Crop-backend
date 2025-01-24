@@ -2,6 +2,7 @@ import express from "express";
 import { createCatagoeryPage, createCategoery, deletCategoery, getCategoery, searchCategoery, updateCatagoeryPage, updateCategoery } from "../../controllers/categoery/index.js";
 import multer from 'multer'
 import fs from 'fs';
+import { ADMIN_CATAGOERY, ADMIN_CREATE_CATAGOERY, ADMIN_DELETE_CATAGOERY, ADMIN_SEARCH_CATAGOERY, ADMIN_UPDATE_CATAGOERY } from "../../constans/endpoints.js";
 const route = express.Router()
 
 const uploadDir = './uploads/catagoery';
@@ -19,13 +20,14 @@ var storage = multer.diskStorage({
 })
  const upload = multer({ storage: storage })
  
-route.get('/',getCategoery)
-route.get('/createCategoery',createCatagoeryPage)
-route.post('/createCategoery',upload.single('categoery_image'),createCategoery)
-route.get('/:id',updateCatagoeryPage)
-route.put('/:id',upload.single('categoery_image'),updateCategoery)
-route.delete('/:id',deletCategoery)
-route.get('/search',searchCategoery)
+route.get(ADMIN_CATAGOERY,getCategoery)
+route.get(ADMIN_SEARCH_CATAGOERY,searchCategoery)
+route.get(ADMIN_CREATE_CATAGOERY,createCatagoeryPage)
+route.post(ADMIN_CREATE_CATAGOERY,upload.single('categoery_image'),createCategoery)
+route.get(ADMIN_UPDATE_CATAGOERY,updateCatagoeryPage)
+route.put(ADMIN_UPDATE_CATAGOERY,upload.single('categoery_image'),updateCategoery)
+route.delete(ADMIN_DELETE_CATAGOERY,deletCategoery)
+
 
 
 
