@@ -59,6 +59,7 @@ async function adminLogin(req, res) {
 
         return renderResponse(ADMIN_LOGIN_PAGE, res, HTTP_SUCCESS, 'Login Successful', ALERT_SUCCESS, ADMIN_DASHBOARD);
     } catch (error) {
+        console.log(error.message)
         return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '');
     }
 }
@@ -114,20 +115,26 @@ function renderResponse(pageName,res, status, alertMessage, alertType, redirectU
 
 async function adminLogout(req, res) {
     try {
-
-        const access_token = req.headers['authorization'].split(' ')[1]
-        const refreh_token = req.headers['refresh_token']
-
-        const result = await Token.deleteOne({ access_token: access_token })
+        const token = req.session.accessToken  
+        const result = await Token.deleteOne({ access_token: token })
 
         if (result.deletedCount === 1) {
-            return res.status(200).json({ message: "Logout Successfully ...." })
+            try{
+                req.session.destroy((err) => {
+                    if (err) {
+                      console.error('Error destroying session:', err);
+                      return  res.status(HTTP_SERVER_ERROR).json({message:"Internal Server Error"})
+                    }
+                    res.status(HTTP_SUCCESS).json({message:"Logged out successfully"})
+                  });
+            }catch(error){
+                res.status(HTTP_SERVER_ERROR).json({message:"Internal Server Error"})
+            }
         } else {
             return res.status(400).json({ message: "Error in Token" })
         }
-
-
     } catch (error) {
+        console.log(error.message)
         res.status(500).json({ message: "Internal server Error" })
     }
 
