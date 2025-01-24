@@ -23,8 +23,11 @@
 <body>
 
     <div class="alert-box alert-box-hide" id="alert-box">
-        <div class="alert" role="alert" id="alert-message-box">
-        </div>
+        <% if (alertMessage) { %>
+            <div class="alert alert-<%= alertType %>" id="alert">
+                <%= alertMessage %>
+            </div>
+            <% } %>
     </div>
 
     <section class="login-form-section">
@@ -33,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title text-center">Forgot Password</h5>
 
-                <form id="forgotEmail-form">
+                <form id="forgotEmail-form" action="/api/auth/reset-mail" method="post">
 
                     <div class="mb-3">
                         <label for="email" class="form-label lable-text">Email</label>

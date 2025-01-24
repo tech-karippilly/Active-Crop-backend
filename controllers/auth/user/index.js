@@ -2,6 +2,7 @@ import {Role, Token, User} from '../../../models/index.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { sendresetMail } from '../../../utils/mailSender.js';
+import { sendOtp } from '../otp/index.js';
 dotenv.config();
 
 async function getUser(req,res){
@@ -16,17 +17,17 @@ async function loginUser(req,res){
         const user = await User.findOne({userName})
 
         if(!user){
-            return res.status(404).json({message:"Users Not Found",status:404})
+            return res.status(404).render('user/auth/loginPage',{ alertMessage: 'Users Not Found', alertType: 'Warnning', redirectUrl: '' })
         }
 
         if(!user.isVerifyed){
-            return res.status(403).json({message:"Users Not Verifyed",status:403})
+            return res.status(403).render('user/auth/loginPage',{ alertMessage: 'Users Not Verifyed', alertType: 'Warnning', redirectUrl: '/api/otp/verifyOtp' })
         }
 
         const isPasswordValid = await user.comparePassword(password)
 
         if(!isPasswordValid){
-            return res.status(400).json({message:"Invalid email or password",status:400})
+            return res.status(400).render('user/auth/loginPage',{ alertMessage: 'Invalid email or password', alertType: 'Warnning', redirectUrl: '' })
         }
 
         const accessToken = jwt.sign(
@@ -44,7 +45,10 @@ async function loginUser(req,res){
           const token = new Token({userId: user._id,access_token:accessToken,refresh_token:refreshToken})
           await token.save()
 
-          res.status(200).json({message:"Login sucessful",access_token:accessToken,refresh_token:refreshToken,status:200})
+          req.session.accessToken = accessToken;
+          req.session.refreshToken = refreshToken;
+
+          res.status(200).render('user/auth/loginPage',{ alertMessage: '"Login sucessful', alertType: 'Sccuess', redirectUrl: '/products' })
     }catch(error){
         console.log('Error on user Login',error.message)
         res.status(500).json({message:'Internal Server Error',status:500})
@@ -60,7 +64,7 @@ async function createUser(req,res){
             firstName,
             lastName,
             email,
-            phone,
+            phone:phone,
             password,
             userName,
             isBlocked:false,
@@ -71,12 +75,14 @@ async function createUser(req,res){
         const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
     
         if (existingUser) {
-            return res.status(400).json({ message: 'Username or email already exists' });
+            res.status(200).render('user/auth/signUp',{ alertMessage: '', alertType: '', redirectUrl: '' })
+            return res.status(400).render('user/auth/signUp',{ alertMessage: 'Username or email already exists', alertType: 'Warnning', redirectUrl: '' })
           }
 
           const newUser = new User(user);
           await newUser.save();
-          res.status(201).json({ message: 'User created successfully', user: newUser });
+          sendOtp(req, res);
+        //   res.status(201).render('user/auth/signUp',{ alertMessage: 'User created successfully', alertType: 'Success', redirectUrl: '/api/auth/login' });
     }catch(error){
         console.error('Error creating user:', error);
         res.status(500).json({ message: 'Internal server error' });
@@ -90,13 +96,13 @@ async function forgotEmailSend(req,res){
         const user  = await User.findOne({email})
 
         if(!user){
-            return res.status(404).json({ message: 'User not Found' ,status:404});
+            return res.status(404).render('user/auth/forgotEmail',{ alertMessage: 'User not Found', alertType: 'Danger', redirectUrl: '' })
         }
 
-        const forgotPasswrodPage = `http://localhost:3000/page/user/forogotPasswordPage?email=${email}`
+        const forgotPasswrodPage = `http://localhost:3000/api/auth/reset-password?email=${email}`
 
         sendresetMail(email,forgotPasswrodPage)
-        res.status(200).json({message:"Email send sucessfully",status:200})
+        res.status(200).render('user/auth/forgotEmail',{ alertMessage: 'Email send sucessfully', alertType: 'Success', redirectUrl: '/api/auth/login' })
     }catch(error){
         console.log('Error Email send',error.message)
         res.status(500).json({message:"Internal Server Error", status:500})
@@ -107,25 +113,26 @@ async function resetPassword(req,res){
 
     try{
 
-        const {email,password,confirmPassword} =req.body
-
+        const email = req.query.email;
+        const {password,confirmPassword} =req.body
+        console.log('working',email)
         const user = await User.findOne({email})
 
         if(!user){
-            return res.status(404).json({ message: 'User not Found' ,status:404});
+            return res.status(404).render('user/auth/forogtPassword',{ alertMessage: 'User not Found', alertType: 'Danger', redirectUrl: '' })
         }
 
         if (password === confirmPassword){
             user.password = password
             await user.save()
-
-            res.status(200).json({message:'Passwrod Update ... ',status:200})
+          
+            res.status(200).json({message:'Password Changed ' ,redirect:'/api/auth/login'})
         }else{
-            return res.status(400).json({message:"Password Mismatch",status:400})
+            return res.status(400).render('user/auth/forogtPassword',{ alertMessage: 'Password Mismatch', alertType: 'Danger', redirectUrl: '' })
         }
     }catch(error){
         console.log('Error Reset Password',error.message)
-        res.status(500).json({message:"Internal Server Error", status:500})
+        res.status(500).render('user/auth/forogtPassword',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
     }
 }
 

@@ -22,7 +22,7 @@
 
 <body>
 
-    <div class="alert-box alert-box-hide" id="alert-box">
+    <div class="alert-box" id="alert-box">
         <% if (alertMessage) { %>
             <div class="alert alert-<%= alertType %>" id="alert">
                 <%= alertMessage %>
@@ -36,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title text-center">OTP verify</h5>
 
-                <form id="otpVerifyForm">
+                <form id="otpVerifyForm" method="post" action="/api/otp/verifyOtp">
 
                     <div class="mb-3">
                         <label for="otpVerify" class="form-label lable-text">OTP Verify</label>
@@ -46,6 +46,7 @@
                     <div class="btn-contianer mb-3">
                         <button type="submit" class="btn ">Verify OTP</button>
                     </div>
+                    <a href="#" onclick="resendOtp(event)">Resend OTP</a>
                 </form>
             </div>
         </div>
@@ -66,6 +67,47 @@
             }, 2000)
 
         }
+        async function resendOtp(event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            try {
+                const response = await fetch('/api/otp/resentOtp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userName: 'vishnu03'
+                    })
+                });
+
+                const data = await response.json();
+
+                const alertBox = document.getElementById('alert-box');
+                if (response.ok) {
+                    alertBox.innerHTML = `
+                        <div class="alert alert-success">
+                            ${data.message}
+                        </div>
+                    `;
+                } else {
+                    alertBox.innerHTML = `
+                        <div class="alert alert-danger">
+                            ${data.message}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const alertBox = document.getElementById('alert-box');
+                alertBox.innerHTML = `
+                    <div class="alert alert-danger">
+                        An error occurred while resending the OTP. Please try again.
+                    </div>
+                `;
+            }
+        }
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

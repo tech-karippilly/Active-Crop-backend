@@ -1,7 +1,7 @@
 import express from "express";
 import { createpage, loginPage } from "../../controllers/auth/admin/index.js";
 import { dasboardPage } from "../../controllers/dashboard/index.js";
-import { forgotEmailSend, forgotPassword, loginPageUser, OtpVerify, signUp } from "../../controllers/user/auth/index.js";
+import { loginPageUser, OtpVerify, signUp } from "../../controllers/user/auth/index.js";
 import { catagoeryPage, createCatagoeryPage, updateCatagoeryPage } from "../../controllers/categoery/index.js";
 import { createProductPage, productPage, updateProductPage } from "../../controllers/products/index.js";
 import { createCustomerPage, customerPage, updateCustomerPage } from "../../controllers/customer/index.js";
@@ -29,8 +29,8 @@ route.get('/admin/updateCustomer',updateCustomerPage)
 
 route.get('/user/loginPage',loginPageUser)
 route.get('/user/signupPage',signUp)
-route.get('/user/forogotEmailSendPage',forgotEmailSend)
-route.get('/user/forogotPasswordPage',forgotPassword)
+// route.get('/user/forogotEmailSendPage',forgotEmailSend)
+// route.get('/user/forogotPasswordPage',forgotPassword)
 route.get('/user/otpVerifyPage',OtpVerify)
 
 route.get('/home',userHomePage)

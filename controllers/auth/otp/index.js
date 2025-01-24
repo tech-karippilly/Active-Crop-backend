@@ -31,11 +31,7 @@ async function sendOtp(req, res) {
         const otpBody = new OTPModel(otpPayload);
 
         await otpBody.save();
-        res.status(200).json({
-            message: 'OTP sent successfully',
-            otp,
-            status:200
-        });
+        res.status(200).redirect('/api/otp/verifyOtp')
        
     } catch (error) {
         console.log("error", error.message)
@@ -46,6 +42,7 @@ async function sendOtp(req, res) {
 async function resendOtp(req, res) {
     
     try {
+        
         const { userName } = req.body
 
         const checkUser = await User.findOne({ userName })
@@ -67,6 +64,7 @@ async function resendOtp(req, res) {
             })
             result = await OTPModel.findOne({ otp: otp });
         }
+        const email =checkUser.email
         const otpPayload = { email, otp };
         const otpBody = new OTPModel(otpPayload);
 
@@ -83,14 +81,13 @@ async function resendOtp(req, res) {
 }
 
 async function verifyOtp(req, res) {
-
-    const { otp } = req.body
+    console.log('working')
     try {
-
-        const getOtp = await OTPModel.findOne({ otp })
+        const { OtpVerify } = req.body
+        const getOtp = await OTPModel.findOne({ otp:OtpVerify })
         
         if(!getOtp){
-            return res.status(404).json({ message: 'OTP record not found' ,status:404});
+            return res.status(404).render('user/auth/otpVerify',{ alertMessage: 'OTP record not found', alertType: 'Danger', redirectUrl: '' })
         }
 
         const otpExpires = 5
@@ -99,16 +96,17 @@ async function verifyOtp(req, res) {
         const expiryTime = createdAt.add(otpExpires, 'minutes');
 
         if (currentTime.isAfter(expiryTime)) {
-            return res.status(400).json({ message: "In valid OTP" ,status:400})
+            return res.status(400).render('user/auth/otpVerify',{ alertMessage: 'In valid OTP', alertType: 'Danger', redirectUrl: '' })
         }
         const user  = await User.findOne({email:getOtp.email})
 
         user.isVerifyed =true
         await  user.save()
 
-        return res.status(200).json({ message: 'OTP verified successfully' ,status:200});
+        return res.status(200).render('user/auth/otpVerify',{ alertMessage: 'OTP verified successfully', alertType: 'success', redirectUrl: '/api/auth/login' })
     } catch (error) {
-        res.status(500).send('Internal server Error')
+        console.log(error.message)
+        res.status(500).render('user/auth/otpVerify',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
     }
 }
 
