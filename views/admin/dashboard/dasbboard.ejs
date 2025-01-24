@@ -13,9 +13,11 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -26,45 +28,52 @@
                 <h1>ADMIN</h1>
             </div>
             <div class="side-bar-menu" id="menuId">
-               <div class="link-container">
-                <a href="/api/admin/dashboard" class="link-text-active">Dashboard</a>
-               </div>
-               <div class="link-container">
-                <a href="/api/products" class="link-text">Products</a>
-               </div>
+                <div class="link-container">
+                    <a href="/api/admin/dashboard" class="link-text-active">Dashboard</a>
+                </div>
+                <div class="link-container">
+                    <a href="/api/products" class="link-text">Products</a>
+                </div>
                 <div class="link-container">
                     <a href="/api/categoery" class="link-text">Categoery</a>
                 </div>
-               <div class="link-container">
-                <a href="#" class="link-text">Orders</a>
-               </div>
-               <div class="link-container">
-                <a href="#" class="link-text">Coupons</a>
-               </div>
-               <div class="link-container">
-                <a href="/api/customer" class="link-text">Customers</a>
-               </div>
-               <div class="link-container">
-                <a href="#" class="link-text">Banner</a>
-               </div>
-               <div class="link-container">
-                <a href="#" class="link-text">Transactions</a>
-               </div>
-               <div class="link-container">
-                <a href="#" class="button-link">Logout</a>
-               </div>
+                <div class="link-container">
+                    <a href="#" class="link-text">Orders</a>
+                </div>
+                <div class="link-container">
+                    <a href="#" class="link-text">Coupons</a>
+                </div>
+                <div class="link-container">
+                    <a href="/api/customer" class="link-text">Customers</a>
+                </div>
+                <div class="link-container">
+                    <a href="#" class="link-text">Banner</a>
+                </div>
+                <div class="link-container">
+                    <a href="#" class="link-text">Transactions</a>
+                </div>
+                <div class="link-container">
+                    <a onclick="logoutUser()" class="button-link">Logout</a>
+                </div>
             </div>
         </section>
         <section class="container-section"></section>
     </div>
 
 
-    <script >
+    <script>
 
-        function logoutUser(){
-            fetch('/api/admin/auth/logout',{
-                method:'GET'
+        function logoutUser() {
+            fetch('/api/admin/auth/logout', {
+                method: 'GET'
             })
+                .then((data) => {
+                    if(data.ok){
+                        window.location.href='/admin'
+                    }
+                }).catch(error => {
+                    console.log('Error during logout:', error);
+                })
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
