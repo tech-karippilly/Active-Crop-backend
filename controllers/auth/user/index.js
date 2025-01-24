@@ -23,6 +23,9 @@ async function loginUser(req,res){
         if(!user.isVerifyed){
             return res.status(403).render('user/auth/loginPage',{ alertMessage: 'Users Not Verifyed', alertType: 'Warnning', redirectUrl: '/api/otp/verifyOtp' })
         }
+        if(!user.isBlocked){
+            return res.status(403).render('user/auth/loginPage',{ alertMessage: 'Error While Login Please contact admin', alertType: 'Danger', redirectUrl: '' })
+        }
 
         const isPasswordValid = await user.comparePassword(password)
 

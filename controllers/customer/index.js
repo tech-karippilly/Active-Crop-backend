@@ -1,15 +1,7 @@
 import { Role, User } from "../../models/index.js"
 
 export const createCustomerPage = (req, res) => {
-    console.log(working)
-    try{
-
-        res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
-    }catch(error){
-        console.log(error)
-        res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
-    }
-   
+    res.send('working')
 }
 
 export const customerPage = (req, res) => {
@@ -117,19 +109,22 @@ export const updateCustomer = async (req, res) => {
 }
 
 export const toggleUserBlockStatus = async (req, res) => {
+    console.log('api called')
     try {
         const user_id = req.params.id
-        const { status } = req.body
+        const status = req.params.status
         const user = await User.findById(user_id);
 
         if (user) {
             user.isBlocked = status
             user.save()
-            return res.status(200).render('admin/customers/index', { alertMessage: 'User Status Updated successfully', alertType: 'success', redirectUrl: '',users:users })
+            return res.status(200).json({message:"User Status Updated successfully"})
         }
-        res.status(404).render('admin/customers/index', { alertMessage: 'User Not found', alertType: 'warnning', redirectUrl: '',users:users })
+        console.log('api called')
+        res.status(404).json({message:"User Not found"})
     } catch (error) {
-        res.status(500).render('admin/customers/index', { alertMessage: 'Internal Server Error', alertType: 'danger', redirectUrl: '',users:users })
+        console.log(error)
+        res.status(500).json({message:"Internal Server Error"})
     }
 }
 
@@ -140,9 +135,10 @@ export const deleteCustomer = async (req, res) => {
         const user = await User.findById(user_id);
         if (user) {
             const delte = await User.deleteOne({_id:user_id})
-            return res.status(200).json({ message: 'User Deleted successfully', });
+            return res.status(200).json({ message: 'User Deleted successfully',redirect:'/api/customer' });
         }
     } catch (error) {
+        console.log(error.message)
         res.status(500).send('Internal Server Error')
     }
 }

@@ -23,11 +23,12 @@ var storage = multer.diskStorage({
 route.get('/',getCoustomers)
 route.get('/:id',getCustomerDetails)
 
-route.get('/createCustomer',createCustomerPage)
+
 route.post('/createCustomer',upload.single('profile_image'),createCustomer)
+
 route.put('/:id',upload.single('profile_image'),updateCustomer)
 
-route.patch('/:id',toggleUserBlockStatus)
+route.patch('/:id/:status',toggleUserBlockStatus)
 
 route.delete('/:id',deleteCustomer)
 
