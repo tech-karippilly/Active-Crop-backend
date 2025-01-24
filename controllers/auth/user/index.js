@@ -53,7 +53,6 @@ async function loginUser(req,res){
 
           res.status(200).render('user/auth/loginPage',{ alertMessage: '"Login sucessful', alertType: 'Sccuess', redirectUrl: '/products' })
     }catch(error){
-)
         res.status(500).json({message:'Internal Server Error',status:500})
     }
 }
@@ -112,7 +111,7 @@ async function forgotEmailSend(req,res){
 }
 
 async function resetPassword(req,res){
-    
+
     try{
         const email = req.query.email;
         const {password,confirmPassword} =req.body
