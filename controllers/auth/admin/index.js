@@ -1,30 +1,90 @@
 import { Role, Token, User } from '../../../models/index.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import session from 'express-session'
 import { ADMIN_DASHBOARD, ADMIN_LOGIN } from '../../../constans/index.js';
+import { isAdminLoginFormValid, isAdminSignupFormValid } from '../../../utils/formValidations.js';
+import { ALERT_DANGER, ALERT_SUCCESS, ALERT_WARNING } from '../../../utils/alert.js';
+import { ADMIN_LOGIN_PAGE, ADMIN_SIGNUP_PAGE } from '../../../constans/page.js';
+import { HTTP_BAD_REQUEST, HTTP_CONFICT, HTTP_FORBIDDEN, HTTP_SERVER_ERROR, HTTP_SUCCESS } from '../../../constans/httpStatus.js';
 dotenv.config();
 
 
 function loginPage(req, res) {
-    res.status(200).render('admin/auth/loginPage', { alertMessage: '', alertType: '', redirectUrl: '' })
+    renderResponse(ADMIN_LOGIN_PAGE, res, HTTP_SUCCESS, '', '', '');
 }
 
+async function adminLogin(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        // Validate form inputs
+        if (!isAdminLoginFormValid(email, password)) {
+            return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_BAD_REQUEST, 'Invalid username or password. Please try again.', ALERT_DANGER, '');
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_CONFICT, 'User not found', ALERT_WARNING, '');
+        }
+
+        // Check if user is verified
+        if (!user.isVerifyed) {
+            return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_FORBIDDEN, 'User is not verified', ALERT_WARNING, '');
+        }
+
+        // Validate password
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_BAD_REQUEST, 'Invalid username or password. Please try again.', ALERT_DANGER, '');
+        }
+
+        // Generate tokens
+        const accessToken = jwt.sign(
+            { userId: user._id, email: user.email, role: user.role },
+            process.env.JWT_SECRET_ACCESS_TOKEN,
+            { expiresIn: '15m' }
+        );
+
+        const refreshToken = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET_REFRESH_TOKEN,
+            { expiresIn: '1d', algorithm: 'HS256' }
+        );
+
+        // Save tokens and set session
+        await new Token({ userId: user._id, access_token: accessToken, refresh_token: refreshToken }).save();
+        req.session.accessToken = accessToken;
+        req.session.refreshToken = refreshToken;
+
+        return renderResponse(ADMIN_LOGIN_PAGE, res, HTTP_SUCCESS, 'Login Successful', ALERT_SUCCESS, ADMIN_DASHBOARD);
+    } catch (error) {
+        return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '');
+    }
+}
+
+
 function createpage(req, res) {
-    res.status(200).render('admin/auth/signupPage', { alertMessage: '', alertType: '', redirectUrl: '' })
+    renderResponse(ADMIN_SIGNUP_PAGE, res, HTTP_SUCCESS, '', '', '');
 }
 
 async function createAdmin(req, res) {
     
     try {
         const { firstName, lastName, userEmail, password, userName,phone, confirmPassword } = req.body
-       
+
+        const validationErrors = isAdminSignupFormValid(firstName, lastName, userEmail, password, userName, phone, confirmPassword);
+
+        if (validationErrors) {
+            const errorMessage = validationErrors.join(" "); 
+            return renderResponse(ADMIN_SIGNUP_PAGE, res, HTTP_BAD_REQUEST, errorMessage, ALERT_DANGER, '');
+        }
         const userRole = await Role.findOne({ roleName: 'SuperAdmin' });
         
         const existingUser = await User.findOne({ $or: [{ userName }, { email:userEmail }] });
         
         if (existingUser) {
-            return res.render('admin/auth/signupPage', { alertMessage: 'Username or email already exists', alertType: 'danger', redirectUrl: '' })
+            return renderResponse(ADMIN_SIGNUP_PAGE, res, HTTP_CONFICT, 'Username or email already exists', ALERT_DANGER, '');
         }
 
         const user = {
@@ -40,54 +100,16 @@ async function createAdmin(req, res) {
 
         const newUser = new User(user);
         await newUser.save();
-        res.status(201).render('admin/auth/signupPage', { alertMessage: 'User Admin Created', alertType: 'success', redirectUrl: ADMIN_LOGIN })
-
+        renderResponse(ADMIN_SIGNUP_PAGE, res, HTTP_SUCCESS, 'User Admin Created', ALERT_SUCCESS, ADMIN_DASHBOARD);
     } catch (error) {
-
-        res.status(500).render('admin/auth/signupPage', { alertMessage: 'error', alertType: 'danger', redirectUrl: '' })
+        renderResponse(ADMIN_SIGNUP_PAGE, res, HTTP_SERVER_ERROR, 'Internal Server Error', ALERT_DANGER, '');
     }
 }
 
-async function adminLogin(req, res) {
-    try {
 
-        const { email, password } = req.body
-        const user = await User.findOne({ email })
-        
-        if (!user) {
-            return res.status(404).render('admin/auth/loginPage', { alertMessage: 'User not Found', alertType: 'danger', redirectUrl: '' })
-        }
 
-        if (!user.isVerifyed) {
-            return res.status(403).render('admin/auth/loginPage', { alertMessage: 'User is not verifyed', alertType: 'warnning', redirectUrl: '' })
-        }
-        const isPasswordValid = await user.comparePassword(password)
-
-        if (!isPasswordValid) {
-            return res.status(400).render('admin/auth/loginPage', { alertMessage: 'Invalid Password or UserName', alertType: 'danger', redirectUrl: '' })
-        }
-
-        const accessToken = jwt.sign(
-            { userId: user._id, email: user.email, role: user.role },
-            process.env.JWT_SECRET_ACCESS_TOKEN,
-            { expiresIn: '15m' }
-        );
-
-        const refreshToken = jwt.sign(
-            { userId: user._id, role: user.role },
-            process.env.JWT_SECRET_REFRESH_TOKEN,
-            { expiresIn: '1d', algorithm: 'HS256' }
-        );
-
-        const token = new Token({ userId: user._id, access_token: accessToken, refresh_token: refreshToken })
-        await token.save()
-        req.session.accessToken = accessToken;
-        req.session.refreshToken = refreshToken;
-        res.status(200).render('admin/auth/loginPage', { alertMessage: 'Login Successfull', alertType: 'sucess', redirectUrl: ADMIN_DASHBOARD })
-    } catch (error) {
-
-        res.status(500).render('admin/auth/loginPage', { alertMessage: 'Internal sever error', alertType: 'danger', redirectUrl: '' })
-    }
+function renderResponse(pageName,res, status, alertMessage, alertType, redirectUrl) {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl });
 }
 
 async function adminLogout(req, res) {
