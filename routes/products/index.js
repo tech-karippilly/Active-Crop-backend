@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
 })
  const upload = multer({ storage: storage })
 
- route.get('/createProducts',createProductPage)
+route.get('/createProducts',createProductPage)
 route.post('/createProducts',upload.array('product_image',4),createProducts)
 route.get('/:id',updateProductPage)
 route.put('/:id',upload.array('product_image',4),updateProduct)

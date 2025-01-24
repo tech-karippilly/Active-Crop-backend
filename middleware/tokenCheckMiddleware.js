@@ -25,3 +25,20 @@ export const tokenCheckMiddleware =async(req,res,next)=>{
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
+
+export const authAdminMiddleware = async(req,res,next)=>{
+
+    if (req.session.access_token){
+        res.redirect('/api/admin/dashboard')
+    }else{
+        next()
+    }
+}
+export const authAdminDashboardMiddleware = async(req,res,next)=>{
+    if (req.session.access_token){
+        next()
+    }else{
+        res.redirect('/api/auth/login')
+    }
+}
+

@@ -40,7 +40,7 @@ async function createAdmin(req, res) {
 
         const newUser = new User(user);
         await newUser.save();
-        res.status(201).render('admin/auth/signupPage', { alertMessage: 'User Admin Created', alertType: 'success', redirectUrl: {ADMIN_LOGIN} })
+        res.status(201).render('admin/auth/signupPage', { alertMessage: 'User Admin Created', alertType: 'success', redirectUrl: ADMIN_LOGIN })
 
     } catch (error) {
         console.log(error.message)
