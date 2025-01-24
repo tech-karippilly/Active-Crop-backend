@@ -1,14 +1,33 @@
-import { Product } from "../../models/index.js"
+import { Categoery, Product } from "../../models/index.js"
 
-export const createProductPage = (req,res)=>{
-    res.status(200).render('admin/products/create',{ alertMessage: '', alertType: '', redirectUrl: '' })
+export const createProductPage =  async (req,res)=>{
+    try{
+        const catagoery = await Categoery.find({})
+        res.status(200).render('admin/products/create',{ alertMessage: '', alertType: '', redirectUrl: '',categories:catagoery })
+    }catch(error){
+        res.status(500).render('admin/products/create',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
+    }
+   
 }
 
 export const productPage =(req,res)=>{
     res.status(200).render('admin/products/index',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
 }
-export const updateProductPage =(req,res)=>{
-    res.status(200).render('admin/products/update',{ alertMessage: '', alertType: '', redirectUrl: '' }) 
+export const updateProductPage = async (req,res)=>{
+    try{
+        const {id} = req.params
+        const catagoery = await Categoery.find({})
+        const productDetails = await Product.findById(id);
+
+        console.log(productDetails)
+        res.status(200).render('admin/products/update',{ alertMessage: '', alertType: '', redirectUrl: '',categories:catagoery,product: productDetails}) 
+
+    }catch(error){
+        const catagoery = await Categoery.find({})
+        const productDetails = await Product.findById(id);
+        res.status(500).render('admin/products/update',{ alertMessage: 'Internal Server Error', alertType: '', redirectUrl: '' ,categories:catagoery,product: productDetails}) 
+    }
+    
 }
 
 export const createProducts = async (req,res)=>{
@@ -17,15 +36,24 @@ export const createProducts = async (req,res)=>{
         for(var i=0;i<req.files.length;i++){
             product_images[i] =req.files[i].path
         }
-
-        const {product_name,description,price,stock_quentity,catagoery_id} = req.body
-
-        const newProduct = new Product({product_name,description,price,stock_quentity,catagoery_id,images:product_images})
-        await newProduct.save()
-        res.status(201).json({message:"Product Created ",status:201})
+        console.log(req.body)
+        const {product_name,description,price,stock_quentity,category_name} = req.body
+        
+        const category = await Categoery.findById({ _id:category_name });
+        const catagoerys= await Categoery.find({})
+        console.log(category)
+        if (category){
+            const data = category.toObject()
+            const newProduct = new Product({product_name,description,price,stock_quentity:stock_quentity,catagoery_id:data._id,images:product_images})
+            await newProduct.save()
+           return res.status(201).render('admin/products/create',{ alertMessage: 'Product Created Successfully', alertType: 'Success', redirectUrl: '/api/products',categories:catagoerys })
+        }
+        res.status(400).render('admin/products/create',{ alertMessage: 'Category not found', alertType: 'warnning', redirectUrl: '',categories:catagoerys })
+        
     }catch(error){
         console.log('Error in Create Products',error.message)
-        res.status(500).json({message:"Internal Server Error",status:500})
+        const catagoerys= await Categoery.find({})
+        res.status(500).render('admin/products/create',{ alertMessage: 'Internal Server Error', alertType: 'danger', redirectUrl: '',categories:catagoerys })
     }
 }
 
@@ -74,10 +102,11 @@ export const deleteProduct = async (req,res)=>{
 export const getProducts = async (req,res)=>{
     try{
         const products = await Product.find({})
-        res.status(200).json({products:products,status:200})
+        console.log(products)
+        res.status(200).render('admin/products/index',{ alertMessage: '', alertType: '', redirectUrl: '' ,data:products}) 
     }catch(error){
         console.log('Error in Create Products',error.message)
-        res.status(500).json({message:"Internal Server Error",status:500})
+        res.status(500).render('admin/products/index',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' ,data:{}})
     }
 }
 

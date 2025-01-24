@@ -10,11 +10,11 @@ const productSchema  =mongoose.Schema({
         required:true
     },
     price:{
-        type:Number,
+        type:String,
         required:true
     },
     stock_quentity:{
-        type:Number,
+        type:String,
         required:true
     },
     catagoery_id:{

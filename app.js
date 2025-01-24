@@ -19,6 +19,8 @@ import productRoute from './routes/products/index.js'
 import dashboardRoute from './routes/dashboard/index.js'
 import pageRoute from './routes/page/index.js'
 import customerRoute from './routes/customer/index.js'
+
+import userProductsRoute from './routes/app/products/index.js'
 const app = express()
 
 ConnectDb()
@@ -61,6 +63,8 @@ app.use('/api/categoery', categoeryRoute)
 app.use('/api/products', productRoute)
 app.use('/api/customer',customerRoute)
 app.use('/api/admin/dashboard',dashboardRoute)
+
+app.use('/products',userProductsRoute)
 
 app.use(session({
     secret: 'user-management',

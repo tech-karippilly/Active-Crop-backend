@@ -1,5 +1,5 @@
 import express from "express";
-import { createProducts, deleteProduct, getProductDetails, getProducts, updateProduct } from "../../controllers/products/index.js";
+import { createProductPage, createProducts, deleteProduct, getProductDetails, getProducts, updateProduct, updateProductPage } from "../../controllers/products/index.js";
 import multer from "multer";
 import fs from 'fs';
 
@@ -20,7 +20,9 @@ var storage = multer.diskStorage({
 })
  const upload = multer({ storage: storage })
 
+ route.get('/createProducts',createProductPage)
 route.post('/createProducts',upload.array('product_image',4),createProducts)
+route.get('/:id',updateProductPage)
 route.put('/:id',upload.array('product_image',4),updateProduct)
 route.delete('/:id',deleteProduct)
 route.get('/',getProducts)
