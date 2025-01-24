@@ -70,8 +70,22 @@
                 <div>
                     <h1>List of Customers</h1>
                 </div>
-                <div class="button-containers">
-                    <button class="btn button-style"  onclick="window.location.href='/api/customer/createCustomer'">Create Customers</button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <form class="form-inline" method="get" action="/api/customer/search">
+                            <div class="input-group">
+                                <input class="form-control" type="search" name="searchString" placeholder="Search"
+                                    aria-label="Search">
+                                <div class="input-group-append ml-1">
+                                    <button class="btn btn-outline-success ml-1" type="submit">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn button-style"
+                            onclick="window.location.href='/api/customer/customer-create'">Create Customer</button>
+                    </div>
                 </div>
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -90,9 +104,11 @@
                                 <td><%= customer.phone %></td>
                                 <td>
                                     
-                                    <a href="/edit/<%= customer._id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/api/customer/<%= customer._id %>"   class="btn btn-primary btn-sm">Edit</a>
                                     <a  class="btn btn-danger btn-sm" onclick="deleteUser('<%= customer._id %>')">Delete</a>
-                                    <a  class="btn btn-warning btn-sm" onclick="blockUser('<%= customer._id %>')">Block</a>
+                                    <a href="#" id="blockBtn-<%= customer._id %>" class="btn btn-warning btn-sm" onclick="blockUser('<%= customer._id %>', `<%= customer.isBlocked %>`)">
+                                        <i class="fas <%= customer.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i> <%= customer.isBlocked ? 'Unblock' : 'Block' %>
+                                    </a>
                                 </td>
                             </tr>
                         <% }); %>
@@ -166,15 +182,14 @@
             }
         }
 
-        async function blockUser(userId) {
-                console.log('working blokcing',userId)
-            if (!confirm('Are you sure you want to block this customer?')) {
+        async function blockUser(userId,status) {
+            if (!confirm(`Are you sure you want to ${status?'un block':'block'} this customer?`)) {
                 return;
             }
 
             try {
                 console.log('api called')
-                const response = await fetch(`/api/customer/${userId}/true`, {
+                const response = await fetch(`/api/customer/${userId}/${!status}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
