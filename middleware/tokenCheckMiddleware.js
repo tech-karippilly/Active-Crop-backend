@@ -16,7 +16,6 @@ export const tokenCheckMiddleware =async(req,res,next)=>{
             const decodedAccess = jwt.verify(access_token,process.env.JWT_SECRET_ACCESS_TOKEN)
             req.user = decodedAccess;
         }catch(error){
-            console.log("error in authorization",error.message)
             return res.status(401).json({message:'Token expires please refresh token',})
         }
         next()

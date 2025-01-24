@@ -34,7 +34,6 @@ async function sendOtp(req, res) {
         res.status(200).redirect('/api/otp/verifyOtp')
        
     } catch (error) {
-        console.log("error", error.message)
         res.status(500).json({message:'Internal server Error',status:500})
     }
 }
@@ -75,13 +74,11 @@ async function resendOtp(req, res) {
         });
 
     } catch (error) {
-        console.log("error", error.message)
         res.status(500).send('Internal server Error')
     }
 }
 
 async function verifyOtp(req, res) {
-    console.log('working')
     try {
         const { OtpVerify } = req.body
         const getOtp = await OTPModel.findOne({ otp:OtpVerify })
@@ -105,7 +102,6 @@ async function verifyOtp(req, res) {
 
         return res.status(200).render('user/auth/otpVerify',{ alertMessage: 'OTP verified successfully', alertType: 'success', redirectUrl: '/api/auth/login' })
     } catch (error) {
-        console.log(error.message)
         res.status(500).render('user/auth/otpVerify',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
     }
 }

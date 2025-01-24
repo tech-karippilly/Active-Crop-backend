@@ -53,7 +53,7 @@ async function loginUser(req,res){
 
           res.status(200).render('user/auth/loginPage',{ alertMessage: '"Login sucessful', alertType: 'Sccuess', redirectUrl: '/products' })
     }catch(error){
-        console.log('Error on user Login',error.message)
+)
         res.status(500).json({message:'Internal Server Error',status:500})
     }
 }
@@ -107,18 +107,15 @@ async function forgotEmailSend(req,res){
         sendresetMail(email,forgotPasswrodPage)
         res.status(200).render('user/auth/forgotEmail',{ alertMessage: 'Email send sucessfully', alertType: 'Success', redirectUrl: '/api/auth/login' })
     }catch(error){
-        console.log('Error Email send',error.message)
         res.status(500).json({message:"Internal Server Error", status:500})
     }
 }
 
 async function resetPassword(req,res){
-
+    
     try{
-
         const email = req.query.email;
         const {password,confirmPassword} =req.body
-        console.log('working',email)
         const user = await User.findOne({email})
 
         if(!user){
@@ -134,7 +131,6 @@ async function resetPassword(req,res){
             return res.status(400).render('user/auth/forogtPassword',{ alertMessage: 'Password Mismatch', alertType: 'Danger', redirectUrl: '' })
         }
     }catch(error){
-        console.log('Error Reset Password',error.message)
         res.status(500).render('user/auth/forogtPassword',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
     }
 }

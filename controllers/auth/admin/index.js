@@ -43,7 +43,7 @@ async function createAdmin(req, res) {
         res.status(201).render('admin/auth/signupPage', { alertMessage: 'User Admin Created', alertType: 'success', redirectUrl: ADMIN_LOGIN })
 
     } catch (error) {
-        console.log(error.message)
+
         res.status(500).render('admin/auth/signupPage', { alertMessage: 'error', alertType: 'danger', redirectUrl: '' })
     }
 }
@@ -85,7 +85,7 @@ async function adminLogin(req, res) {
         req.session.refreshToken = refreshToken;
         res.status(200).render('admin/auth/loginPage', { alertMessage: 'Login Successfull', alertType: 'sucess', redirectUrl: ADMIN_DASHBOARD })
     } catch (error) {
-        console.log('Error', error.message)
+
         res.status(500).render('admin/auth/loginPage', { alertMessage: 'Internal sever error', alertType: 'danger', redirectUrl: '' })
     }
 }
@@ -106,7 +106,6 @@ async function adminLogout(req, res) {
 
 
     } catch (error) {
-        console.log("Error in logout", error.message)
         res.status(500).json({ message: "Internal server Error" })
     }
 

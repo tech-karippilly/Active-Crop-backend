@@ -24,7 +24,7 @@ const mailSender = async (email, title, body) => {
       });
       return info;
     } catch (error) {
-      console.log(error.message);
+      (error.message);
     }
   };
 
@@ -37,7 +37,6 @@ const mailSender = async (email, title, body) => {
          <p>here is the link ${link}</p>`
       );
     } catch (error) {
-      console.log("Error occurred while sending email: ", error);
       throw error;
     }
   }

@@ -41,7 +41,6 @@ async function loginUser(req,res){
 
           res.status(200).json({message:"Login sucessful",access_token:accessToken,refresh_token:refreshToken,status:200})
     }catch(error){
-        console.log('Error on user Login',error.message)
         res.status(500).json({message:'Internal Server Error',status:500})
     }
 }

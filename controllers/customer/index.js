@@ -12,10 +12,8 @@ export const updateCustomerPage = async (req, res) => {
     try {
         const { id } = req.params
         const users = await User.findById({ _id: id })
-        console.log(users)
         res.status(200).render('admin/customers/update', { alertMessage: '', alertType: '', redirectUrl: '', user: users })
     } catch (error) {
-        console.log(error.message)
     }
 
 }
@@ -132,7 +130,6 @@ export const updateCustomer = async (req, res) => {
 }
 
 export const toggleUserBlockStatus = async (req, res) => {
-    console.log('api called')
     try {
         const user_id = req.params.id
         const status = req.params.status
@@ -143,10 +140,8 @@ export const toggleUserBlockStatus = async (req, res) => {
             user.save()
             return res.status(200).json({ message: "User Status Updated successfully" })
         }
-        console.log('api called')
         res.status(404).json({ message: "User Not found" })
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: "Internal Server Error" })
     }
 }
@@ -161,7 +156,6 @@ export const deleteCustomer = async (req, res) => {
             return res.status(200).json({ message: 'User Deleted successfully', redirect: '/api/customer' });
         }
     } catch (error) {
-        console.log(error.message)
         res.status(500).send('Internal Server Error')
     }
 }

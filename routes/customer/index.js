@@ -24,7 +24,6 @@ route.get('/',getCoustomers)
 // route.get('/:id',getCustomerDetails)
 
 route.get('/customer-create',(req,res)=>{
-  console.log('working')
 })
 
 route.get('/createCustomer',createCustomerPage)

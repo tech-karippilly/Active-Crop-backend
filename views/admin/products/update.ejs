@@ -161,7 +161,6 @@
 
                 const redirectUrl = "<%= redirectUrl %>";
                 if (redirectUrl && redirectUrl.trim() !== "") {
-                    console.log(redirectUrl)
                     setTimeout(() => {
                         window.location.href = redirectUrl;
                     }, 2000)
@@ -181,7 +180,6 @@
                     formData.append('stock_quantity', document.getElementById('stock_quantity').value);
                     formData.append('description', document.getElementById('description').value);
                     formData.append('catagoery_id', document.getElementById('categoryId').value);
-                    console.log(formData)
                     const imageUrl = "/<%= product.images['0'] %>";
 
                     for (let i = 1; i <= 4; i++) {

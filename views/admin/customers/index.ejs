@@ -129,7 +129,6 @@
 
         const redirectUrl = "<%= redirectUrl %>";
         if (redirectUrl && redirectUrl.trim() !== "") {
-            console.log(redirectUrl)
             setTimeout(() => {
                 window.location.href = redirectUrl;
             }, 2000)
@@ -138,13 +137,11 @@
 
   
             async function deleteUser(userId) {
-                console.log('working blokcing',userId)
             if (!confirm('Are you sure you want to Delete this customer?')) {
                 return;
             }
 
             try {
-                console.log('api called')
                 const response = await fetch(`/api/customer/${userId}`, {
                     method: 'delete',
                     headers: {
@@ -153,7 +150,6 @@
                 });
 
                 const data = await response.json();
-                console.log('api called',data)
                 const alertBox = document.getElementById('alert-box');
                 if (response.ok) {
                     alertBox.innerHTML = `
@@ -188,7 +184,6 @@
             }
 
             try {
-                console.log('api called')
                 const response = await fetch(`/api/customer/${userId}/${!status}`, {
                     method: 'PATCH',
                     headers: {
