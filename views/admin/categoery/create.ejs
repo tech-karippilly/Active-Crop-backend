@@ -77,18 +77,18 @@
                     <form id="create-catagoery-form" method="post" action="/api/categoery/createCategoery" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="categoery_image" class="form-label">Select Catagoery Image</label>
-                            <input class="form-control" type="file" name="categoery_image" id="formFile">
+                            <input class="form-control" type="file" name="categoery_image" id="formFile" required>
                         </div>
                         <div class="mb-3">
                             <label for="cataName" class="form-label lable-text">Catagoery Name</label>
                             <input type="text" class="form-control" name="cataName" id="exampleInputEmail1"
-                                aria-describedby="emailHelp">
+                                aria-describedby="emailHelp" required>
 
                         </div>
                         <div class="mb-3">
                             <div class="form-floating">
                                 <textarea class="form-control" placeholder="Leave description" name="description"
-                                    id="floatingTextarea2" style="height: 100px"></textarea>
+                                    id="floatingTextarea2" style="height: 100px" required></textarea>
                                 <label for="floatingTextarea2">Description</label>
                             </div>
 

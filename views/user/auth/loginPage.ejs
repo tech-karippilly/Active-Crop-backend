@@ -39,12 +39,12 @@
                 <form id="login-form" action="/api/auth/login" method="post">
                     <div class="mb-3">
                         <label for="userName" class="form-label lable-text">User Name</label>
-                        <input type="text" class="form-control" name="userName" id="exampleInputEmail1">
+                        <input type="text" class="form-control" name="userName" id="exampleInputEmail1" required>
 
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label lable-text">Password</label>
-                        <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+                        <input type="password" class="form-control" name="password" id="exampleInputPassword1" required>
                     </div>
                     <div class="mb-3 forgot-container">
                         <a class="link " href="/api/auth/reset-mail">forgot password?</a>
