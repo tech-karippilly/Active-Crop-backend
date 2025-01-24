@@ -44,7 +44,7 @@
                     <a href="#" class="link-text">Coupons</a>
                 </div>
                 <div class="link-container">
-                    <a href="/page/admin/customer" class="link-text-active">Customers</a>
+                    <a href="/api/customer" class="link-text-active">Customers</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Banner</a>
@@ -64,8 +64,33 @@
                     <h1>List of Customers</h1>
                 </div>
                 <div class="button-containers">
-                    <button class="btn button-style"  onclick="window.location.href='/page/admin/createCustomer'">Create Customers</button>
+                    <button class="btn button-style"  onclick="window.location.href='/api/customer/createCustomer'">Create Customers</button>
                 </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% customers.forEach(function(customer) { %>
+                            <tr>
+                                <td><%= customer.firstName %> <%= customer.lastName %></td>
+                                <td><%= customer.email %></td>
+                                <td><%= customer.phone %></td>
+                                <td>
+                                    
+                                    <a href="/edit/<%= customer._id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/delete/<%= customer._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?');">Delete</a>
+                                    <a href="/block/<%= customer._id %>" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to block this customer?');">Block</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
             </div>
 
         </section>

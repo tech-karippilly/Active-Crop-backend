@@ -1,7 +1,15 @@
 import { Role, User } from "../../models/index.js"
 
 export const createCustomerPage = (req, res) => {
-    res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
+    console.log(working)
+    try{
+
+        res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
+    }catch(error){
+        console.log(error)
+        res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
+    }
+   
 }
 
 export const customerPage = (req, res) => {
@@ -15,9 +23,9 @@ export const updateCustomerPage = (req, res) => {
 export const getCoustomers = async (req, res) => {
     try {
         const users = await  User.find({})
-        res.status(200).send(users)
+        res.status(200).render('admin/customers/index', { alertMessage: '', alertType: '', redirectUrl: '',customers:users })
     } catch (error) {
-        res.status(500).send('Internal Server Error')
+        res.status(500).render('admin/customers/index', { alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '',users:users })
     }
 }
 
@@ -56,16 +64,16 @@ export const createCustomer = async (req, res) => {
         const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
 
         if (existingUser) {
-            return res.status(400).json({ message: 'Username or email already exists' });
+            return res.status(400).render('admin/customers/create', { alertMessage: 'Username or email already exists', alertType: 'warnning', redirectUrl: '' })
         }
 
 
         const newUser = new User(user);
         await newUser.save();
-        res.status(201).json({ message: 'User created successfully', user: newUser });
+        res.status(201).render('admin/customers/create', { alertMessage: 'User created successfully', alertType: 'scuccess', redirectUrl: '/api/customer' })
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).render('admin/customers/create', { alertMessage: 'Internal server error', alertType: 'danger', redirectUrl: '' })
     }
 }
 
@@ -95,18 +103,19 @@ export const updateCustomer = async (req, res) => {
                     existingUser.profileImage = fileName
 
                 await existingUser.save();
-                return res.status(200).json({ message: 'User Updated successfully', });
+                return res.status(200).render('admin/customers/update', { alertMessage: 'User Updated successfully', alertType: 'success', redirectUrl: '/api/customer' })
             }
 
-            res.status(404).json({ message: 'User Not fount', });
+            res.status(404).render('admin/customers/update', { alertMessage: 'User Not found', alertType: 'success', redirectUrl: '' });
         } catch (error) {
             console.error('Error creating user:', error);
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).render('admin/customers/update', { alertMessage: 'Internal server error', alertType: 'success', redirectUrl: '' });
         }
     } catch (error) {
-        res.status(500).send('Internal Server Error')
+        res.status(500).render('admin/customers/update', { alertMessage: 'Internal server error', alertType: 'success', redirectUrl: '' });
     }
 }
+
 export const toggleUserBlockStatus = async (req, res) => {
     try {
         const user_id = req.params.id
@@ -116,11 +125,11 @@ export const toggleUserBlockStatus = async (req, res) => {
         if (user) {
             user.isBlocked = status
             user.save()
-            return res.status(200).json({ message: 'User Status Updated successfully', });
+            return res.status(200).render('admin/customers/index', { alertMessage: 'User Status Updated successfully', alertType: 'success', redirectUrl: '',users:users })
         }
-        res.status(404).json({ message: 'User Not fount', });
+        res.status(404).render('admin/customers/index', { alertMessage: 'User Not found', alertType: 'warnning', redirectUrl: '',users:users })
     } catch (error) {
-        res.status(500).send('Internal Server Error')
+        res.status(500).render('admin/customers/index', { alertMessage: 'Internal Server Error', alertType: 'danger', redirectUrl: '',users:users })
     }
 }
 

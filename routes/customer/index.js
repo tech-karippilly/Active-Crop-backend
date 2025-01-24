@@ -1,7 +1,7 @@
 import express from "express";
 import multer from 'multer'
 import fs from 'fs';
-import { createCustomer, deleteCustomer, getCoustomers, getCustomerDetails, toggleUserBlockStatus, updateCustomer } from "../../controllers/customer/index.js";
+import { createCustomer, createCustomerPage, deleteCustomer, getCoustomers, getCustomerDetails, toggleUserBlockStatus, updateCustomer } from "../../controllers/customer/index.js";
 const route = express.Router()
 
 const uploadDir = './uploads/profile';
@@ -23,6 +23,7 @@ var storage = multer.diskStorage({
 route.get('/',getCoustomers)
 route.get('/:id',getCustomerDetails)
 
+route.get('/createCustomer',createCustomerPage)
 route.post('/createCustomer',upload.single('profile_image'),createCustomer)
 route.put('/:id',upload.single('profile_image'),updateCustomer)
 
