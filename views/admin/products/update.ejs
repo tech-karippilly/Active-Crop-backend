@@ -102,15 +102,15 @@
             </div>
             <div class="mb-3">
                 <label for="product_name" class="form-label label-text">Product Name</label>
-                <input type="text" class="form-control" name="product_name" id="productName">
+                <input type="text" value="<%=product.product_name %>" class="form-control" name="product_name" id="product_name">
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label label-text">Product Price</label>
-                <input type="text" class="form-control" name="price" id="price">
+                <input type="text" value="<%=product.price %>" class="form-control" name="price" id="price">
             </div>
             <div class="mb-3">
                 <label for="stock_quantity" class="form-label label-text">Stock Quantity</label>
-                <input type="text" class="form-control" name="stock_quantity" id="stockQuantity">
+                <input type="text" class="form-control"  value="<%=product.stock_quentity %>" name="stock_quantity" id="stock_quantity">
             </div>
             <div class="mb-3">
                 <div class="dropdown">
@@ -131,7 +131,7 @@
             <div class="mb-3">
                 <div class="form-floating">
                     <textarea class="form-control" placeholder="Leave description" name="description"
-                        id="description" style="height: 100px"></textarea>
+                        id="description" style="height: 100px"><%=  product.description %></textarea>
                     <label for="description">Description</label>
                 </div>
             </div>
@@ -168,7 +168,12 @@
                 document.getElementById('create-category-form').onsubmit = async function (event) {
             event.preventDefault();
 
-            const formData = new FormData(this);
+            const formData = new FormData();
+            formData.append('product_name', document.getElementById('product_name').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('stock_quantity', document.getElementById('stock_quantity').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('catagoery_id', category);
             const imageUrl = "/<%= product.images['0'] %>";
 
             for (let i = 1; i <= 4; i++) {
