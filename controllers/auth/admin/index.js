@@ -115,14 +115,9 @@ function renderResponse(pageName,res, status, alertMessage, alertType, redirectU
 
 async function adminLogout(req, res) {
     try {
-
         const token = req.session.accessToken  
-
-        if(token){
-
-        }
         const result = await Token.deleteOne({ access_token: token })
-        console.log(result)
+
         if (result.deletedCount === 1) {
             try{
                 req.session.destroy((err) => {
@@ -135,13 +130,9 @@ async function adminLogout(req, res) {
             }catch(error){
                 res.status(HTTP_SERVER_ERROR).json({message:"Internal Server Error"})
             }
-
-            
         } else {
             return res.status(400).json({ message: "Error in Token" })
         }
-
-
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ message: "Internal server Error" })
