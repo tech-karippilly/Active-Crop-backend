@@ -93,13 +93,24 @@ async function adminLogin(req, res) {
 async function adminLogout(req, res) {
     try {
 
-        const access_token = req.headers['authorization'].split(' ')[1]
-        const refreh_token = req.headers['refresh_token']
+        const accessToken = req.session.accessToken
 
-        const result = await Token.deleteOne({ access_token: access_token })
+        const result = await Token.deleteOne({ access_token: accessToken })
 
         if (result.deletedCount === 1) {
-            return res.status(200).json({ message: "Logout Successfully ...." })
+            try{
+                req.session.destroy((err) => {
+                    if (err) {
+                      console.error('Error destroying session:', err);
+                      return  res.status(HTTP_SERVER_ERROR).json({message:"Internal Server Error"})
+                    }
+                    res.status(HTTP_SUCCESS).json({message:"Logoout successfully"})
+                  });
+            }catch(error){
+                res.status(HTTP_SERVER_ERROR).json({message:"Internal Server Error"})
+            }
+
+            
         } else {
             return res.status(400).json({ message: "Error in Token" })
         }

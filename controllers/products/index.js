@@ -102,6 +102,8 @@ export const getProducts = async (req,res)=>{
     }
 }
 
+
+
 export const getProductDetails = async (req,res)=>{
     try{
         const product_id = req.params.id
@@ -111,4 +113,6 @@ export const getProductDetails = async (req,res)=>{
         res.status(500).json({message:"Internal Server Error",status:500})
     }
 }
+
+
 
