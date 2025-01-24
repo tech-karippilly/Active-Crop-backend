@@ -53,7 +53,7 @@ async function adminLogin(req, res) {
 
         const { email, password } = req.body
         const user = await User.findOne({ email })
-
+        
         if (!user) {
             return res.status(404).render('admin/auth/loginPage', { alertMessage: 'User not Found', alertType: 'danger', redirectUrl: '' })
         }

@@ -4,10 +4,12 @@ import { authAdminMiddleware, tokenCheckMiddleware } from "../../../middleware/t
 
 const route = express.Router()
 
+route.get('/',authAdminMiddleware,loginPage)
+route.post('/login',authAdminMiddleware,adminLogin)
+
 route.get('/create-admin',createpage)
 route.post('/create-admin',createAdmin)
-route.get('/login',authAdminMiddleware,loginPage)
-route.post('/login',authAdminMiddleware,adminLogin)
+
 route.get('/logout',tokenCheckMiddleware,adminLogout)
 
 export default route

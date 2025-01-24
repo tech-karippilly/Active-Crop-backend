@@ -23,10 +23,10 @@ import customerRoute from './routes/customer/index.js'
 import userProductsRoute from './routes/app/products/index.js'
 const app = express()
 
+//DATABASE CONFIG
 ConnectDb()
 
-
-
+//MIDDLEWARES
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extends: true }))
@@ -36,10 +36,11 @@ app.use(function (req, res, next) {
 });
 
 
-
+//FILE IMPORT
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//SESSION CREATE
 app.use(session({
     secret: 'user-management',
     resave: false,
@@ -47,54 +48,38 @@ app.use(session({
     cookie: { secure: false }
 }))
 
+//VIEW ENGINE
 app.set('view engine', 'ejs');
 app.set('views', 'views')
 
+//STATIC FILES 
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
-app.use(session({
-    secret: 'user-management',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}))
-
-app.set('view engine', 'ejs');
-app.set('views', 'views')
-
-app.use('/public', express.static('public'));
-app.use('/uploads', express.static('uploads'));
-
-
-app.use('/api/admin/role', roleAuth)
+// ADMIN ROUTES
 app.use('/api/admin/auth', adiminAuthRoute)
-app.use('/api/auth', userRoute)
-app.use('/api/otp/', otpRoute)
-app.use('/api/auth/token', tokenRoute)
-
+app.use('/api/admin/role', roleAuth)
+app.use('/api/admin/dashboard',dashboardRoute)
 app.use('/api/categoery', categoeryRoute)
 app.use('/api/products', productRoute)
+app.use('/api/customer',customerRoute)
 
-
-
-app.use('/api/admin/role', roleAuth)
-app.use('/api/admin/auth', adiminAuthRoute)
+//USER ROUTES
 app.use('/api/auth', userRoute)
 app.use('/api/otp/', otpRoute)
 app.use('/api/auth/token', tokenRoute)
-
-app.use('/api/customer',customerRoute)
-app.use('/api/admin/dashboard',dashboardRoute)
-
 app.use('/products',userProductsRoute)
-
 
 app.use('/page',pageRoute)
 
+// INITIAL ROUTES
 app.get('/',(req,res)=>{
     // res.redirect('/page')
     res.status(200).render('user/home/homePage')
+})
+
+app.get('/admin',(req,res)=>{
+    res.status(200).redirect('/api/admin/auth')
 })
 
 
