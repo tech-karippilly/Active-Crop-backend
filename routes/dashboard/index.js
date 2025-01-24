@@ -1,11 +1,11 @@
 import express from "express";
 import { dasboardPage } from "../../controllers/dashboard/index.js";
-import { authAdminDashboardMiddleware } from "../../middleware/tokenCheckMiddleware.js";
+import { adminAuthMiddleware } from "../../middleware/adminAuthMiddleware.js";
 
 
 const route = express.Router()
 
 
-route.get('/',authAdminDashboardMiddleware,dasboardPage)
+route.get('/',adminAuthMiddleware,dasboardPage)
 
 export default route
