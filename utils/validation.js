@@ -11,3 +11,13 @@ export const isPasswordValid =(password)=>{
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
 }
+
+export const isValidPhoneNumber=(phoneNumber) =>{
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phoneNumber);
+}
+
+export const isUserNameValid = (userName)=>{
+     const usernameRegex = /^[a-zA-Z0-9]+$/;
+     return usernameRegex.test(userName)
+}
