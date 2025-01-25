@@ -1,59 +1,28 @@
+import { HTTP_BAD_REQUEST, HTTP_SERVER_ERROR, HTTP_SUCCESS } from "../../constans/httpStatus.js"
+import { ADMIN_CUSTOMER_CREATE_PAGE, ADMIN_CUSTOMER_LIST_PAGE, ADMIN_CUSTOMER_UPDATE_PAGE } from "../../constans/page.js"
 import { Role, User } from "../../models/index.js"
+import { ALERT_DANGER, ALERT_SUCCESS, ALERT_WARNING } from "../../utils/alert.js"
 
-export const createCustomerPage = (req, res) => {
-    res.status(200).render('admin/customers/create', { alertMessage: '', alertType: '', redirectUrl: '' })
 
-}
 
-export const customerPage = (req, res) => {
-    res.status(200).render('admin/customers/index', { alertMessage: '', alertType: '', redirectUrl: '' })
-}
+
 export const updateCustomerPage = async (req, res) => {
-    try {
-        const { id } = req.params
-        const users = await User.findById({ _id: id })
-        res.status(200).render('admin/customers/update', { alertMessage: '', alertType: '', redirectUrl: '', user: users })
-    } catch (error) {
+    try{
+        const id = req.params.id
+        const users = await User.findById(id)
+      
+        if(users){
+            console.log('working',users)
+            return renderPage(ADMIN_CUSTOMER_UPDATE_PAGE, res, HTTP_SUCCESS, '', '', '', users)
+        }else{
+            return res.redirect('/api/customers')
+        }
+      
+    }catch(error){
+        console.log(error.message)
+        return res.redirect('/api/customers')
     }
 
-}
-
-
-export const getCoustomers = async (req, res) => {
-    try {
-        const users = await User.find({})
-        res.status(200).render('admin/customers/index', { alertMessage: '', alertType: '', redirectUrl: '', customers: users })
-    } catch (error) {
-        res.status(500).render('admin/customers/index', { alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '', users: users })
-    }
-}
-
-export const searchCustomers = async (req, res) => {
-    try {
-        const { searchString } = req.query
-        const searchUserCriteria = {
-            $or: [
-                { firstName: { $regex: searchString, $options: 'i' } },
-                { lastName: { $regex: searchString, $options: 'i' } },
-                { email: { $regex: searchString, $options: 'i' } },
-                { phone: { $regex: searchString, $options: 'i' } }
-            ]
-        };
-        const customers = await User.find(searchUserCriteria);
-        res.status(200).render('admin/customers/index', { alertMessage: '', alertType: '', redirectUrl: '', customers: customers })
-    } catch (error) {
-        res.status(500).render('admin/customers/index', { alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '', customers: [] })
-    }
-}
-
-export const getCustomerDetails = async (req, res) => {
-    try {
-        const user_id = req.params.id
-        const users = await User.findById(user_id)
-        res.status(200).send(users)
-    } catch (error) {
-        res.status(500).send('Internal Server Error')
-    }
 }
 
 export const createCustomer = async (req, res) => {
@@ -77,20 +46,65 @@ export const createCustomer = async (req, res) => {
             profileImage: fileName
         }
 
-
         const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
 
         if (existingUser) {
-            return res.status(400).render('admin/customers/create', { alertMessage: 'Username or email already exists', alertType: 'warnning', redirectUrl: '' })
+            return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_BAD_REQUEST, 'Username or email already exists', ALERT_WARNING, '')
         }
-
 
         const newUser = new User(user);
         await newUser.save();
-        res.status(201).render('admin/customers/create', { alertMessage: 'User created successfully', alertType: 'scuccess', redirectUrl: '/api/customer' })
+        return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SUCCESS, 'User created successfully', ALERT_SUCCESS, '/api/customer')
     } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).render('admin/customers/create', { alertMessage: 'Internal server error', alertType: 'danger', redirectUrl: '' })
+        console.log(error)
+        return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '')
+    }
+}
+
+export const createCustomerPage = (req, res) => {
+    return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SUCCESS, '', '', '')
+}
+
+export const getCoustomers = async (req, res) => {
+    try {
+        const users = await User.find({})
+
+        renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SUCCESS, '', '', '', users)
+    } catch (error) {
+        renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SUCCESS, 'Internal Server Error', ALERT_DANGER, '', [])
+    }
+}
+
+export const searchCustomers = async (req, res) => {
+    try {
+        const { searchString } = req.query
+        const searchUserCriteria = {
+            $or: [
+                { firstName: { $regex: searchString, $options: 'i' } },
+                { lastName: { $regex: searchString, $options: 'i' } },
+                { email: { $regex: searchString, $options: 'i' } },
+                { phone: { $regex: searchString, $options: 'i' } }
+            ]
+        };
+        const customers = await User.find(searchUserCriteria);
+
+        renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SUCCESS, '', '', '', customers)
+    } catch (error) {
+        renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SERVER_ERROR, 'Internal Server Error', ALERT_DANGER, '', [])
+    }
+}
+
+const renderPage = (pageName, res, status, alertMessage, alertType, redirectUrl, customers) => {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, customers })
+}
+
+export const getCustomerDetails = async (req, res) => {
+    try {
+        const user_id = req.params.id
+        const users = await User.findById(user_id)
+        res.status(200).send(users)
+    } catch (error) {
+        res.status(500).send('Internal Server Error')
     }
 }
 
@@ -99,7 +113,7 @@ export const updateCustomer = async (req, res) => {
         const _id = req.params.id
         const { firstName, lastName, email, password, userName, phone } = req.body
         const userRole = await Role.findOne({ roleName: 'User' });
-        
+
         const filePath = JSON.parse(JSON.stringify(req.file))
 
         const fileName = `${process.env.HOST_URL}/${filePath.path}`
@@ -115,7 +129,7 @@ export const updateCustomer = async (req, res) => {
             existingUser.userName = userName
             existingUser.isBlocked = false
             existingUser.role = userRole._id,
-            existingUser.profileImage = fileName
+                existingUser.profileImage = fileName
 
             await existingUser.save();
             return res.status(200).render('admin/customers/update', { alertMessage: 'User Updated successfully', alertType: 'success', redirectUrl: '/api/customer', user: existingUser })
