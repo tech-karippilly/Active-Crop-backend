@@ -69,6 +69,7 @@ const updateCategoery = async (req, res) => {
         }
       return  res.status(HTTP_NOT_FOUND).json({message:'Categoery Not  Found'})
     } catch (error) {
+        
        return res.status(HTTP_SERVER_ERROR).json({ message: "Internal Server Error",})
     }
 }
@@ -101,7 +102,6 @@ const searchCategoery = async (req, res) => {
 }
 
 const renderPage = (pageName, res, status, alertMessage, alertType, redirectUrl, data) => {
-    console.log(pageName)
     res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, data })
 }
 
