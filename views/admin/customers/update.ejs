@@ -18,6 +18,15 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <style>
+        .img-container {
+            width: 20%;
+            height: 10rem !important;
+            border-radius: 10px;
+            overflow: hidden;
+            object-fit: contain;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,61 +65,71 @@
                     <a href="#" class="button-link">Logout</a>
                 </div>
             </div>
-            </div>
-        </section>
-        <section class="container-section p-5  w-100">
+    </div>
+    </section>
+    <section class="container-section p-5  w-100">
 
-            <div class="container-fluid  w-100">
-                <div>
-                    <h1>Update Customer</h1>
-                </div>
-
-                <div class="catagoery-form">
-                    <form id="create-catagoery-form" method="post" enctype="multipart/form-data" action="/api/customer/<%=user._id %>">
-                        <div class=" row">
-                            <div class="col">
-                                <label for="profile_image" class="form-label">Select Profile Image</label>
-                                <input class="form-control" type="file" name="profile_image" id="formFile">
-                            </div>
-                        </div>
-
-                        <div class=" row">
-                            <div class="col">
-                                <label for="firstName" class="form-label lable-text">First Name</label>
-                                <input type="text" value="<%= user.firstName %>" class="form-control" name="firstName" id="exampleInputEmail1">
-                            </div>
-                            <div class="col">
-                                <label for="lastName" class="form-label lable-text">Last Name</label>
-                                <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName" id="exampleInputEmail1">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label lable-text">User Email</label>
-                            <input type="email" class="form-control" value="<%= user.email %>" name="email" id="exampleInputEmail1">
-
-                        </div>
-                        <div class="mb-3 d-none">
-                            <label for="password" class="form-label lable-text">password</label>
-                            <input type="password" class="form-control"  value="<%= user.password %>" name="password" id="exampleInputEmail1">
-                        </div>
-                        <div class="mb-3">
-                            <label for="userName" class="form-label lable-text">User Name</label>
-                            <input type="text" class="form-control" value="<%= user.userName %>" name="userName" id="exampleInputEmail1">
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label lable-text">Phone</label>
-                            <input type="tel" class="form-control" value="<%= user.phone %>" name="phone" id="exampleInputEmail1">
-                        </div>
-
-                        <div class="btn-contianer">
-                            <button type="submit" class="btn button-style">Update Coustomer</button>
-                        </div>
-
-                    </form>
-                </div>
+        <div class="container-fluid  w-100">
+            <div>
+                <h1>Update Customer</h1>
             </div>
 
-        </section>
+            <div class="catagoery-form">
+                <form id="create-catagoery-form" method="post" enctype="multipart/form-data"
+                    action="/api/customer/<%=customers._id %>">
+                    <div class="img-container">
+                        <img src="<%= customers.image %>" alt="Image" style="width: 100%;height: 100%;" id="image">
+                    </div>
+                    <div class=" row">
+                        <div class="col">
+                            <label for="profile_image" class="form-label">Select Profile Image</label>
+                            <input class="form-control" type="file" name="profile_image" id="formFile">
+                        </div>
+                    </div>
+
+                    <div class=" row">
+                        <div class="col">
+                            <label for="firstName" class="form-label lable-text">First Name</label>
+                            <input type="text" value="<%= customers.firstName %>" class="form-control" name="firstName"
+                                id="exampleInputEmail1">
+                        </div>
+                        <div class="col">
+                            <label for="lastName" class="form-label lable-text">Last Name</label>
+                            <input type="text" class="form-control" value="<%= customers.lastName %>" name="lastName"
+                                id="exampleInputEmail1">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label lable-text">User Email</label>
+                        <input type="email" class="form-control" value="<%= customers.email %>" name="email"
+                            id="exampleInputEmail1">
+
+                    </div>
+                    <div class="mb-3 d-none">
+                        <label for="password" class="form-label lable-text">password</label>
+                        <input type="password" class="form-control" value="<%= customers.password %>" name="password"
+                            id="exampleInputEmail1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="userName" class="form-label lable-text">User Name</label>
+                        <input type="text" class="form-control" value="<%= customers.userName %>" name="userName"
+                            id="exampleInputEmail1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label lable-text">Phone</label>
+                        <input type="tel" class="form-control" value="<%= customers.phone %>" name="phone"
+                            id="exampleInputEmail1">
+                    </div>
+
+                    <div class="btn-contianer">
+                        <button type="submit" class="btn button-style">Update Coustomer</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </section>
     </div>
 
 

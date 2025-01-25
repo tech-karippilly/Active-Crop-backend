@@ -21,6 +21,13 @@
 </head>
 
 <body>
+    <div class="alert-box" id="alert-box">
+        <% if (alertMessage) { %>
+            <div class="alert alert-<%= alertType %>" id="alert">
+                <%= alertMessage %>
+            </div>
+            <% } %>
+    </div>
 
     <div class="main-container">
         <section class="side-bar">
@@ -65,7 +72,7 @@
                 </div>
 
                 <div class="catagoery-form">
-                    <form id="create-catagoery-form" method="post" action="/api/customer/createCustomer">
+                    <form id="create-catagoery-form" method="post" action="/api/customer/create-customer" enctype="multipart/form-data">
                         <div class=" row">
                             <div class="col">
                                 <label for="profile_image" class="form-label">Select Profile Image</label>
@@ -113,7 +120,21 @@
     </div>
 
 
-    <script src="./script.js"></script>
+    <script >
+                const alertBox = document.getElementById('alert-box')
+        setTimeout(() => {
+            alertBox.classList = '';
+            alertBox.innerHTML = '';
+        }, 3000);
+
+        const redirectUrl = "<%= redirectUrl %>";
+        if (redirectUrl && redirectUrl.trim() !== "") {
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 2000)
+
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
