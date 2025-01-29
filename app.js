@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import session from "express-session";
 import { fileURLToPath } from 'url';
 import path from 'path';
-
+import passport from 'passport'
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ const app = express()
 ConnectDb()
 
 //MIDDLEWARES
-app.use(cors())
+// app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extends: true }))
 app.use(function (req, res, next) {
@@ -42,11 +42,19 @@ const __dirname = path.dirname(__filename);
 
 //SESSION CREATE
 app.use(session({
-    secret: 'user-management',
+    secret: process.env.SESSION,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
 }))
+
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 //VIEW ENGINE
 app.set('view engine', 'ejs');
@@ -55,6 +63,7 @@ app.set('views', 'views')
 //STATIC FILES 
 app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
+
 
 // ADMIN ROUTES
 app.use('/api/admin/auth', adiminAuthRoute)
@@ -69,6 +78,8 @@ app.use('/api/auth', userRoute)
 app.use('/api/otp/', otpRoute)
 app.use('/api/auth/token', tokenRoute)
 app.use('/products',userProductsRoute)
+
+
 
 app.use('/page',pageRoute)
 

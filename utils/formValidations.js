@@ -36,7 +36,13 @@ function isAdminSignupFormValid(firstName, lastName, userEmail, password, userNa
     return errors.length > 0 ? errors : null; 
 }
 
+function isUserLoginFormValid(userName){
+    const isUserName =isUserNameValid(userName)
+    return isUserName
+}
+
 export{
     isAdminLoginFormValid,
-    isAdminSignupFormValid
+    isAdminSignupFormValid,
+    isUserLoginFormValid
 }

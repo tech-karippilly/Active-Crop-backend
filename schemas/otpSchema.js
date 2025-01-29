@@ -19,8 +19,6 @@ const otpSchema = new mongoose.Schema({
     timestamps:true
 })
 
-
-
 async function sendVerificationEmail(email, otp) {
     try {
       const mailResponse = await mailSender(

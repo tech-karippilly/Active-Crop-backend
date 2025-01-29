@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema({
         required:true,
         unique: true 
     },
+    googleId:{type:String,required:false},
     phone: { type: String, required: true },
     password: { type: String, required: true },
     isBlocked: { type: Boolean, default: false },

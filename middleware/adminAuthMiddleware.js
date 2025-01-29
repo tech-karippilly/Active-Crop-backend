@@ -7,30 +7,20 @@ import { ALERT_DANGER } from '../utils/alert.js';
 dotenv.config();
 
 export const adminAuthMiddleware = async (req, res, next) => {
-    try {
+    try{
+        const access_token = req.session.accessToken
 
-        const token = req.session.accessToken   
-        
-        if (!token) {
-            return renderResponse(ADMIN_LOGIN_PAGE,res,HTTP_UNAUTHORIZED,'Access denied. No token provided.',ALERT_DANGER,'')
+        const token = await  Token.findOne({access_token})
+
+        if (!token){
+            return res.status(HTTP_UNAUTHORIZED).send('Access Denied')
         }
-
-        // Verify the access token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_ACCESS_TOKEN);
         
-        const userId = decoded.userId; 
+        const jwtDecode = jwt.verify(token,process_params.env.JWT_SECRET_ACCESS_TOKEN)
+        const userId = jwtDecode.userId
+    }
+    catch(error){
 
-        const user = await User.findById({_id:userId});
-
-        const userRole = await Role.findById(user.role)
-
-        if (!user || userRole.roleName === 'User' ) {
-            return renderResponse(ADMIN_LOGIN_PAGE,res,HTTP_FORBIDDEN,'Access denied. Admin rights required.',ALERT_DANGER,'')
-          
-        }
-        next();
-    } catch (error) {
-        renderResponse(ADMIN_LOGIN_PAGE,res,HTTP_SERVER_ERROR,'Internal server error.',ALERT_DANGER,'')
     }
 };
 
