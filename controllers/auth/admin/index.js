@@ -43,7 +43,7 @@ async function adminLogin(req, res) {
         const accessToken = jwt.sign(
             { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET_ACCESS_TOKEN,
-            { expiresIn: '15m' }
+            { expiresIn: '1m' }
         );
 
         const refreshToken = jwt.sign(
@@ -52,8 +52,7 @@ async function adminLogin(req, res) {
             { expiresIn: '1d', algorithm: 'HS256' }
         );
 
-        // Save tokens and set session
-        await new Token({ userId: user._id, access_token: accessToken, refresh_token: refreshToken }).save();
+
         req.session.accessToken = accessToken;
         req.session.refreshToken = refreshToken;
 

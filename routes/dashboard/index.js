@@ -6,6 +6,6 @@ import { adminAuthMiddleware } from "../../middleware/adminAuthMiddleware.js";
 const route = express.Router()
 
 
-route.get('/',adminAuthMiddleware,dasboardPage)
+route.get('/',dasboardPage)
 
 export default route
