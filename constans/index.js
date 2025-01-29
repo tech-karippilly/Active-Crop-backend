@@ -4,4 +4,4 @@ export const ADMIN_CREATE = `${ADMIN_BASE}/auth/create-admin`
 export const ADMIN_DASHBOARD = `${ADMIN_BASE}/dashboard`
 export const ADMIN_LOGOUT = `${ADMIN_BASE}/logout`
 
-export const ADMIN_CATAGOERY_ROUTE='/api/categoery'
+export const ADMIN_CATAGOERY_ROUTE='/admin/categoery'

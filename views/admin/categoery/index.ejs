@@ -45,7 +45,7 @@
                     <a href="/api/products" class="link-text">Products</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/categoery" class="link-text-active">Categoery</a>
+                    <a href="/admin/catagoery" class="link-text-active">Categoery</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Orders</a>
@@ -77,10 +77,10 @@
                 <div class="container mt-5">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <form class="form-inline"method="get" action="/api/categoery/search">
+                            <form class="form-inline"method="get" action="/admin/catagoery/search">
                                 <div class="input-group">
                                     <input class="form-control" type="search" name="searchString" placeholder="Search"
-                                        aria-label="Search" required>
+                                        aria-label="Search" >
                                     <div class="input-group-append ml-1">
                                         <button class="btn btn-outline-success ml-1" type="submit">Search</button>
                                     </div>
@@ -89,7 +89,7 @@
                         </div>
                         <div class="col-md-6 text-right">
                             <button class="btn button-style"
-                                onclick="window.location.href='/api/categoery/createCategoery'">Create
+                                onclick="window.location.href='/admin/catagoery/createCategoery'">Create
                                 Categoery</button>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <a href="/api/categoery/<%= item._id %>" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="/admin/catagoery/<%= item._id %>" class="btn btn-warning btn-sm">Edit</a>
                                         <a onclick="deleteCatagoery('<%= item.id %>')" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
@@ -146,7 +146,7 @@
                 const confirmation = confirm('Are you sure you want to delete this category?');
                 if (!confirmation) return;
 
-                const response = await fetch(`/api/categoery/${id}`, {
+                const response = await fetch(`/admin/catagoery/${id}`, {
                     method: 'DELETE',
                 });
 

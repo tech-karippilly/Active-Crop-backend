@@ -98,4 +98,10 @@ body{
     align-items: center;
     padding: 5px;
 }
-
+.img-container {
+    width: 10rem;
+    height: 10rem !important;
+    border-radius: 10px;
+    overflow: hidden;
+    object-fit: contain;
+}

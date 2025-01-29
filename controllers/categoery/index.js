@@ -3,7 +3,7 @@ import { ADMIN_CATAGOERY_CREATE_PAGE, ADMIN_CATAGOERY_EDIT_PAGE, ADMIN_CATAGOERY
 import { Categoery } from '../../models/index.js'
 import dotenv from 'dotenv';
 import { ALERT_DANGER, ALERT_SUCCESS, ALERT_WARNING } from '../../utils/alert.js';
-import { ADMIN_CATAGOERY, ADMIN_CREATE_CATAGOERY } from '../../constans/endpoints.js';
+import { ADMIN_CATAGOERY, ADMIN_CATAGOERY_BASE, ADMIN_CREATE_CATAGOERY } from '../../constans/endpoints.js';
 import { ADMIN_CATAGOERY_ROUTE } from '../../constans/index.js';
 dotenv.config();
 
@@ -37,7 +37,7 @@ const createCategoery = async (req, res) => {
         const fileName = `${process.env.HOST_URL}/${filePath.path}`
         const catagoery = new Categoery({ catagoery_name: cataName, description: description, image: fileName })
         await catagoery.save()
-        return renderPage(ADMIN_CATAGOERY_CREATE_PAGE,res,HTTP_SUCCESS,'Categoery Created Successfully',ALERT_SUCCESS,ADMIN_CATAGOERY_ROUTE+ADMIN_CATAGOERY,[])
+        return renderPage(ADMIN_CATAGOERY_CREATE_PAGE,res,HTTP_SUCCESS,'Categoery Created Successfully',ALERT_SUCCESS,ADMIN_CATAGOERY_BASE,[])
     } catch (error) {
         return renderPage(ADMIN_CATAGOERY_CREATE_PAGE,res,HTTP_SERVER_ERROR,'Internal Server error',ALERT_DANGER,'',[])
     }
@@ -65,7 +65,7 @@ const updateCategoery = async (req, res) => {
             cataDetails.description = description
             cataDetails.image = fileName
             await cataDetails.save()
-            return res.status(HTTP_SUCCESS).json({ message: 'Catagoery Updated Succssfully ',redirectUrl:ADMIN_CATAGOERY_ROUTE+ADMIN_CATAGOERY })
+            return res.status(HTTP_SUCCESS).json({ message: 'Catagoery Updated Succssfully ',redirectUrl:ADMIN_CATAGOERY_BASE })
         }
       return  res.status(HTTP_NOT_FOUND).json({message:'Categoery Not  Found'})
     } catch (error) {

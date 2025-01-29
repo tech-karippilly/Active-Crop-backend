@@ -8,7 +8,6 @@ export const ADMIN_LOGOUT ='/logout'
 export const ADMIN_DASHBOARD_BASE = '/admin/dashboard'
 
 export const ADMIN_CATAGOERY_BASE = '/admin/catagoery'
-
 export const ADMIN_CATAGOERY='/'
 export const ADMIN_CREATE_CATAGOERY = '/createCategoery'
 export const ADMIN_UPDATE_CATAGOERY = '/:id'

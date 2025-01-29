@@ -20,26 +20,14 @@
         rel="stylesheet">
 
     <style>
-        .img-container {
-            width: 20%;
-            height: 10rem !important;
-            border-radius: 10px;
-            overflow: hidden;
-            object-fit: contain;
-        }
+
     </style>
 </head>
 
 
 <body>
 
-    <div class="alert-box" id="alert-box">
-        <% if (alertMessage) { %>
-            <div class="alert alert-<%= alertType %>" id="alert">
-                <%= alertMessage %>
-            </div>
-            <% } %>
-    </div>
+
     <div class="main-container">
         <section class="side-bar">
             <div class="side-bar-heading">
@@ -53,7 +41,7 @@
                     <a href="/api/products" class="link-text">Products</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/categoery" class="link-text-active">Categoery</a>
+                    <a href="/admin/catagoery" class="link-text-active">Categoery</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Orders</a>
@@ -76,7 +64,13 @@
             </div>
         </section>
         <section class="container-section p-5  w-100">
-
+            <div class="alert-box" id="alert-box">
+                <% if (alertMessage) { %>
+                    <div class="alert alert-<%= alertType %>" id="alert">
+                        <%= alertMessage %>
+                    </div>
+                    <% } %>
+            </div>
             <div class="container-fluid  w-100">
                 <div>
                     <h1>Update Catagoery</h1>
@@ -117,6 +111,18 @@
         </section>
     </div>
     <script>
+        console.log('working')
+        document.getElementById('update-catagoery-form').addEventListener('change',(event)=>{
+            console.log('working')
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                document.getElementById('image').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            }
+        })
         const alertBox = document.getElementById('alert-box')
         setTimeout(() => {
             alertBox.classList = '';
@@ -150,7 +156,7 @@
             }
             try {
                 const cataId = '<%= data._id %>'; 
-                const response = await fetch(`/api/categoery/${cataId}`, {
+                const response = await fetch(`/admin/catagoery/${cataId}`, {
                     method: 'PUT',
                     body: formData 
                 });

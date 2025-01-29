@@ -43,7 +43,7 @@
                     <a href="/api/products" class="link-text">Products</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/categoery" class="link-text-active">Categoery</a>
+                    <a href="/admin/catagoery" class="link-text-active">Categoery</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Orders</a>
@@ -74,7 +74,10 @@
                 </div>
 
                 <div class="catagoery-form">
-                    <form id="create-catagoery-form" method="post" action="/api/categoery/createCategoery" enctype="multipart/form-data">
+                    <form id="create-catagoery-form" method="post" action="/admin/catagoery/createCategoery" enctype="multipart/form-data">
+                        <div class="img-container" id="preview-image">
+                            <img  alt="Image" id="image" style="width: 100%;height: 100%;" id="image">
+                        </div>
                         <div class="mb-3">
                             <label for="categoery_image" class="form-label">Select Catagoery Image</label>
                             <input class="form-control" type="file" name="categoery_image" id="formFile" required>
@@ -106,6 +109,21 @@
 
 
     <script>
+        const previewImage = document.getElementById('preview-image')
+        previewImage.style.display='none'
+
+        document.getElementById("create-catagoery-form").addEventListener('change',(event)=>{
+            const file = event.target.files[0];
+            if (file) {
+                 previewImage.style.display='block'
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                document.getElementById('image').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            }
+        })
+        
         const alertBox = document.getElementById('alert-box')
         setTimeout(() => {
             alertBox.classList = '';
