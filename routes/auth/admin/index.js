@@ -6,8 +6,8 @@ import { adminAuthMiddleware, preventLoggedInAccess } from "../../../middleware/
 
 const route = express.Router()
 
-route.get(ADMIN_LOGIN,preventLoggedInAccess,loginPage)
-route.post(ADMIN_LOGIN_POST,preventLoggedInAccess,adminLogin)
+route.get(ADMIN_LOGIN,loginPage)
+route.post(ADMIN_LOGIN_POST,adminLogin)
 
 route.get(ADMIN_CREATE,createpage)
 route.post(ADMIN_CREATE,createAdmin)

@@ -39,7 +39,7 @@ async function sendOtp(req, res) {
 }
 
 async function resendOtp(req, res) {
-    
+
     try {
         
         const { userName } = req.body
