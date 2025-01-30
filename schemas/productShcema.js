@@ -13,7 +13,7 @@ const productSchema  =mongoose.Schema({
         type:String,
         required:true
     },
-    stock_quentity:{
+    stock_quantity:{
         type:String,
         required:true
     },

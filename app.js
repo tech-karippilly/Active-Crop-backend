@@ -21,7 +21,7 @@ import pageRoute from './routes/page/index.js'
 import customerRoute from './routes/customer/index.js'
 
 import userProductsRoute from './routes/app/products/index.js'
-import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE } from "./constans/endpoints.js";
+import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE } from "./constans/endpoints.js";
 const app = express()
 
 //DATABASE CONFIG
@@ -71,7 +71,7 @@ app.use(ADMIN_AUTH_BASE, adiminAuthRoute)
 app.use('/api/admin/role', roleAuth)
 app.use('/api/admin/dashboard',dashboardRoute)
 app.use(ADMIN_CATAGOERY_BASE, categoeryRoute)
-app.use('/api/products', productRoute)
+app.use(ADMIN_PRODUCTS_BASE, productRoute)
 app.use('/api/customer',customerRoute)
 
 //USER ROUTES

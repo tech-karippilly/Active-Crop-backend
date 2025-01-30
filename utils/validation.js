@@ -21,3 +21,18 @@ export const isUserNameValid = (userName)=>{
      const usernameRegex = /^[a-zA-Z0-9]+$/;
      return usernameRegex.test(userName)
 }
+
+export const validateProductName=(name) =>{
+    const regex = /^[a-zA-Z0-9-' ]{2,50}$/;
+    return regex.test(name);
+}
+
+export const validatePrice =(price)=>{
+    const regex = /^\d{1,7}(\.\d{1,2})?$/;
+    return regex.test(price);
+}
+
+export const validateStockQuantity =(quantity)=>{
+    const regex = /^\d{1,7}$/;
+    return regex.test(quantity);
+}

@@ -32,10 +32,10 @@
                     <a href="/api/admin/dashboard" class="link-text">Dashboard</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/products" class="link-text-active">Products</a>
+                    <a href="/admin/catagoery" class="link-text">Categoery</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/categoery" class="link-text">Categoery</a>
+                    <a href="/admin/products" class="link-text-active">Products</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Orders</a>
@@ -67,7 +67,7 @@
                 <div class="container mt-5">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <form class="form-inline" method="get" action="/api/products/search">
+                            <form class="form-inline" method="get" action="/admin/products/search">
                                 <div class="input-group">
                                     <input class="form-control" type="search" name="searchString" placeholder="Search"
                                         aria-label="Search">
@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-6 text-right">
                             <button class="btn button-style"
-                                onclick="window.location.href='/api/products/createProducts'">Create
+                                onclick="window.location.href='/admin/products/createProducts'">Create
                                 Products</button>
                         </div>
                     </div>
@@ -105,23 +105,20 @@
                                     </td>
                                     <td>
                                         <p style="font-size: 13px;">
-                                            <%= item.stock_quentity %>
+                                            <%= item.stock_quantity %>
                                         </p>
                                     </td>
                                     <td>
-                                        <a href="/api/products/<%= item._id %>" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="/admin/products/<%= item._id %>" class="btn btn-warning btn-sm">Edit</a>
                                         <a onclick="deleteCatagoery('<%= item.id %>')"
                                             class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                                 <% }); %>
                         </tbody>
-
                 </div>
-
         </section>
     </div>
-
 
     <script>
         function deleteCatagoery(id) {

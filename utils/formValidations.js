@@ -1,4 +1,4 @@
-import { isEmailValid, isNameValid, isPasswordValid, isUserNameValid, isValidPhoneNumber } from "./validation.js"
+import { isEmailValid, isNameValid, isPasswordValid, isUserNameValid, isValidPhoneNumber, validatePrice, validateProductName, validateStockQuantity } from "./validation.js"
 
 function isAdminLoginFormValid(email,password){
 
@@ -41,8 +41,28 @@ function isUserLoginFormValid(userName){
     return isUserName
 }
 
+function productFormValid(product_name, price, stock_quantity) {
+    const errors = {};
+
+    if (!validateProductName(product_name)) {
+        errors.product_name = "Invalid product name! (2-50 characters, no special symbols)";
+    }
+
+    if (!validatePrice(price)) {
+        errors.price = "Invalid price! (Only numbers, max 2 decimal places)";
+    }
+
+    if (!validateStockQuantity(stock_quantity)) {
+        errors.stock_quantity = "Invalid stock quantity! (Only whole numbers, 1-7 digits)";
+    }
+
+    return Object.keys(errors).length === 0 ? true : errors;
+}
+
+
 export{
     isAdminLoginFormValid,
     isAdminSignupFormValid,
-    isUserLoginFormValid
+    isUserLoginFormValid,
+    productFormValid
 }

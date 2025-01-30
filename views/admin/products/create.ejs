@@ -18,17 +18,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body>
-    <div class="alert-box" id="alert-box">
-        <% if (alertMessage) { %>
-            <div class="alert alert-<%= alertType %>" id="alert">
-                <%= alertMessage %>
-            </div>
-            <% } %>
-    </div>
+
 
     <div class="main-container">
         <section class="side-bar">
@@ -40,10 +33,10 @@
                     <a href="/api/admin/dashboard" class="link-text">Dashboard</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/products" class="link-text-active">Products</a>
+                    <a href="/admin/catagoery" class="link-text">Categoery</a>
                 </div>
                 <div class="link-container">
-                    <a href="/api/categoery" class="link-text">Categoery</a>
+                    <a href="/admin/products" class="link-text-active">Products</a>
                 </div>
                 <div class="link-container">
                     <a href="#" class="link-text">Orders</a>
@@ -66,72 +59,107 @@
             </div>
         </section>
         <section class="container-section p-5  w-100">
-
-            <div class="container-fluid  w-100">
+            <div class="alert-box" id="alert-box">
+                <% if (alertMessage) { %>
+                    <div class="alert alert-<%= alertType %>" id="alert">
+                        <%= alertMessage %>
+                    </div>
+                    <% } %>
+            </div>
+            <div class="container-fluid w-100">
                 <div>
                     <h1>Create Product</h1>
                 </div>
 
                 <div class="category-form">
-                    <form id="create-product-form" method="POST" action="/api/products/createProducts" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col">
-                                <label for="product_image1" class="form-label">Select Product Image 1</label>
-                                <input class="form-control" type="file" name="product_image" id="formFile1" required>
-                            </div>
-                            <div class="col">
-                                <label for="product_image2" class="form-label">Select Product Image 2</label>
-                                <input class="form-control" type="file" name="product_image" id="formFile2" required>
-                            </div>
-                            <div class="col">
-                                <label for="product_image3" class="form-label">Select Product Image 3</label>
-                                <input class="form-control" type="file" name="product_image" id="formFile3" required>
-                            </div>
-                            <div class="col">
-                                <label for="product_image4" class="form-label">Select Product Image 4</label>
-                                <input class="form-control" type="file" name="product_image" id="formFile4" required>
+                    <div class="row" id="image-preview-container">
+                        <div class="col">
+                            <div class="img-container">
+                                <img alt="Image" id="image1" style="width: 100%; height: 100%;" />
                             </div>
                         </div>
-                    
+                        <div class="col">
+                            <div class="img-container">
+                                <img alt="Image" id="image2" style="width: 100%; height: 100%;" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="img-container">
+                                <img alt="Image" id="image3" style="width: 100%; height: 100%;" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="img-container">
+                                <img alt="Image" id="image4" style="width: 100%; height: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="create-product-form" method="POST" action="/admin/products/createProducts"
+                        enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col">
+                                <label for="formFile1" class="form-label">Select Product Image 1</label>
+                                <input class="form-control" type="file" name="product_image" id="formFile1"
+                                    accept="image/*" required>
+                            </div>
+                            <div class="col">
+                                <label for="formFile2" class="form-label">Select Product Image 2</label>
+                                <input class="form-control" type="file" name="product_image" id="formFile2"
+                                    accept="image/*" required>
+                            </div>
+                            <div class="col">
+                                <label for="formFile3" class="form-label">Select Product Image 3</label>
+                                <input class="form-control" type="file" name="product_image" id="formFile3"
+                                    accept="image/*" required>
+                            </div>
+                            <div class="col">
+                                <label for="formFile4" class="form-label">Select Product Image 4</label>
+                                <input class="form-control" type="file" name="product_image" id="formFile4"
+                                    accept="image/*" required>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="product_name" class="form-label">Product Name</label>
                             <input type="text" class="form-control" name="product_name" id="product_name" required>
                         </div>
-                    
+
                         <div class="mb-3">
                             <label for="price" class="form-label">Product Price</label>
                             <input type="text" class="form-control" name="price" id="price" required>
                         </div>
-                    
+
                         <div class="mb-3">
                             <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                            <input type="text" class="form-control" name="stock_quentity" id="stock_quentity" required>
+                            <input type="text" class="form-control" name="stock_quantity" id="stock_quantity" required>
                         </div>
-                    
+
                         <div class="mb-3">
-                            <label for="category_name" class="form-label">Category Name</label>
+                            <label for="catagoery">Select Catagoery</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Select Category
+                                <button class="btn border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="catagoery-name">
+                                  Select Catagoery
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <% data.forEach(function(category) { %>
-                                        <li><a class="dropdown-item" href="#" onclick="selectCategory('<%= category._id %>')">
-                                            <%= category.catagoery_name %>
-                                        </a></li>
-                                    <% }); %>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+
+                                    <% data.forEach((catagoery)=>{ %>
+                                        <li><a class="dropdown-item " onclick="selectCategory('<%= catagoery._id %>','<%= catagoery.catagoery_name %>')" ><%= catagoery.catagoery_name %></a></li>
+                                        <% }); %>
+
                                 </ul>
-                            </div>
-                            <input type="hidden" name="category_name" id="categoryName" required>
+                              </div>
+                              <input type="text" class="form-control visually-hidden" name="catagoery_id" id="catagoery_id" required>
                         </div>
-                    
+
                         <div class="mb-3">
                             <div class="form-floating">
-                                <textarea class="form-control" placeholder="Leave description" name="description" id="description" style="height: 100px" required></textarea>
+                                <textarea class="form-control" placeholder="Leave description" name="description"
+                                    id="description" style="height: 100px" required></textarea>
                                 <label for="floatingTextarea2">Description</label>
                             </div>
                         </div>
-                    
+
                         <div class="btn-container">
                             <button type="submit" class="btn button-style">Create Product</button>
                         </div>
@@ -142,11 +170,33 @@
     </div>
 
     <script>
+        console.log("catagories", "<%=catagories%>")
+      const imagePreviewContainer =   document.getElementById('image-preview-container')
+      imagePreviewContainer.style.display = 'none'
+        function previewImage(inputId, imageId) {
+            document.getElementById(inputId).addEventListener('change', function (event) {
+                 imagePreviewContainer.style.display = 'flex'
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById(imageId).src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        previewImage('formFile1', 'image1');
+        previewImage('formFile2', 'image2');
+        previewImage('formFile3', 'image3');
+        previewImage('formFile4', 'image4');
+
         const alertBox = document.getElementById('alert-box')
         setTimeout(() => {
             alertBox.classList = '';
             alertBox.innerHTML = '';
-        }, 3000);
+        }, 5000);
 
         const redirectUrl = "<%= redirectUrl %>";
         if (redirectUrl && redirectUrl.trim() !== "") {
@@ -155,9 +205,11 @@
             }, 2000)
 
         }
-        function selectCategory(categoryId) {
-        document.getElementById('categoryName').value = categoryId;
-    }
+        function selectCategory(categoryId, categoryName) {
+            console.log('working')
+            document.getElementById('catagoery-name').innerText = categoryName
+            document.getElementById('catagoery_id').value = categoryId
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
