@@ -12,8 +12,21 @@ main{
 
 }
 .header-section{
+    width: 100% !important;
+    margin: 0 !important;
+    height: 10vh !important;
+    overflow: hidden;
+}
+
+.image-container{
+    width: 20%;
+    height: 100%;
+}
+
+.image{
     width: 100%;
-    height: 10vh;
+    height: 100%;
+    object-fit: contain;
 }
 
 .body-section{
@@ -33,4 +46,53 @@ main{
     min-height: 40vh;
     max-height: auto;
 
+}
+.categoery-container{
+    width: 100%;
+    height: 2.5rem;
+    background-color: #52BE80;
+}
+.categoery-list{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.categoery-list li{
+    margin-left: 1rem;
+    text-align: center;
+    color: white;
+    text-transform: capitalize;
+}
+
+
+.carousel-item{
+    width: 30rem !important;
+    height: 30rem !important;
+    overflow: hidden;
+}
+
+.col-controller{
+    height: 30rem !important;
+}
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.condent-section{
+    width: 100%;
+    min-height: 60vh;
+    max-height: auto;
+    padding: 2rem;
+}
+.footet-container{
+    position: relative !important;
+}
+.copyright-container{
+    position: relative !important;
 }

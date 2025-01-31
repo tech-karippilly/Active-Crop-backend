@@ -21,7 +21,6 @@ export const adminAuthMiddleware = async (req, res, next) => {
             if (currentUserRole) {
                 if (currentUserRole.roleName === 'SuperAdmin' || currentUserRole.roleName === 'admin') {
                     next()
-                    console.log('working')
                 }
                 return renderResponse(ADMIN_LOGIN_PAGE,res,HTTP_UNAUTHORIZED,'Unauthorized',ALERT_DANGER,'')
             }

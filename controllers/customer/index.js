@@ -12,14 +12,12 @@ export const updateCustomerPage = async (req, res) => {
         const users = await User.findById(id)
       
         if(users){
-            console.log('working',users)
             return renderPage(ADMIN_CUSTOMER_UPDATE_PAGE, res, HTTP_SUCCESS, '', '', '', users)
         }else{
             return res.redirect('/api/customers')
         }
       
     }catch(error){
-        console.log(error.message)
         return res.redirect('/api/customers')
     }
 
@@ -56,7 +54,6 @@ export const createCustomer = async (req, res) => {
         await newUser.save();
         return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SUCCESS, 'User created successfully', ALERT_SUCCESS, '/api/customer')
     } catch (error) {
-        console.log(error)
         return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '')
     }
 }

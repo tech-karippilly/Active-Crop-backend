@@ -11,7 +11,6 @@ function createSatergyGoogle() {
     //     clientSecret:process.env.GOOGLE_CLIENT_SECRET,
     //     callbackURL:'http://localhost:3000/api/auth/google/callback'
     // } ,(accessToken,refreshToken,profile,done)=>{
-    //     console.log('profile',profile)
     //     return done(null,profile)
     // }))
 
@@ -21,9 +20,6 @@ function createSatergyGoogle() {
         callbackURL: 'http://localhost:3000/api/auth/google/callback'
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-
-
-            console.log("profile", profile)
             // Check if user exists in the database
             let user = await User.findOne({ googleId: profile.id });
 

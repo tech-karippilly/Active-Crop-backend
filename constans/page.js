@@ -14,3 +14,7 @@ export const ADMIN_CUSTOMER_CREATE_PAGE = 'admin/customers/create'
 export const ADMIN_CUSTOMER_UPDATE_PAGE = 'admin/customers/update'
 
 export const USER_LOGIN_PAGE = 'user/auth/loginPage'
+
+export const USER_HOME_PAGE = 'user/home/homePage'
+export const USER_PRODUCT_PAGE = 'user/products/products'
+export const USER_PRODUCT_DETAILS_PAGE = 'user/products/productDetails'

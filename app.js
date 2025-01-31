@@ -19,9 +19,11 @@ import productRoute from './routes/products/index.js'
 import dashboardRoute from './routes/dashboard/index.js'
 import pageRoute from './routes/page/index.js'
 import customerRoute from './routes/customer/index.js'
-
 import userProductsRoute from './routes/app/products/index.js'
-import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE } from "./constans/endpoints.js";
+import homeRoute from './routes/app/home/index.js'
+
+import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE, USER_HOME, USER_PRODUCTS } from "./constans/endpoints.js";
+import { renderHomepage } from "./controllers/app/home/index.js";
 const app = express()
 
 //DATABASE CONFIG
@@ -78,17 +80,14 @@ app.use('/api/customer',customerRoute)
 app.use('/api/auth', userRoute)
 app.use('/api/otp/', otpRoute)
 app.use('/api/auth/token', tokenRoute)
-app.use('/products',userProductsRoute)
+app.use(USER_PRODUCTS,userProductsRoute)
 
 
 
 app.use('/page',pageRoute)
 
 // INITIAL ROUTES
-app.get('/',(req,res)=>{
-    // res.redirect('/page')
-    res.status(200).render('user/home/homePage')
-})
+app.get(USER_HOME,renderHomepage)
 
 app.get('/admin',(req,res)=>{
     res.status(200).redirect(ADMIN_AUTH_BASE)

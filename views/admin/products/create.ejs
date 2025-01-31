@@ -170,7 +170,6 @@
     </div>
 
     <script>
-        console.log("catagories", "<%=catagories%>")
       const imagePreviewContainer =   document.getElementById('image-preview-container')
       imagePreviewContainer.style.display = 'none'
         function previewImage(inputId, imageId) {
@@ -206,7 +205,6 @@
 
         }
         function selectCategory(categoryId, categoryName) {
-            console.log('working')
             document.getElementById('catagoery-name').innerText = categoryName
             document.getElementById('catagoery_id').value = categoryId
         }

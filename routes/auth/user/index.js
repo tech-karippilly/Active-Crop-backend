@@ -20,9 +20,7 @@ route.get(USER_AUTH_GOOGLE, Passport.authenticate('google', { scope: ['profile',
 route.get(USER_ATUH_GOOGLE_CALLBACK, Passport.authenticate('google', { failureRedirect: "/api/auth/login" }),googleLogin)
 
 route.get('/profile', (req, res) => {
-    console.log('Session:', req.session); 
     if (req.user) {
-        console.log('User:', req.user); 
         res.status(200).send("<a href='/api/auth/logout'>logout</a>")
     } else {
         res.redirect('/'); // Redirect if user is not logged in

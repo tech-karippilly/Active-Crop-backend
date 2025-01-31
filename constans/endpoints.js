@@ -37,6 +37,8 @@ export const USER_ATUH_GOOGLE_CALLBACK = '/google/callback'
 export const USER_HOME ='/'
 export const USER_CATAGOERY= '/catagoery'
 export const USER_PRODUCTS ='/products'
+export const USER_PRODUCT_DETAILS = '/details/:id'
+
 
 
 

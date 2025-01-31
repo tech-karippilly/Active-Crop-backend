@@ -93,7 +93,6 @@ export const createProducts = async (req, res) => {
         return renderPage(ADMIN_PRODUCT_CREATE_PAGE, res, HTTP_NOT_FOUND, 'Category not found', ALERT_WARNING, '', {})
     } catch (error) {
         const catagoerys = await Categoery.find({})
-        console.log("error", error.message)
         return renderPage(ADMIN_PRODUCT_CREATE_PAGE, res, HTTP_SERVER_ERROR, 'Internal Server Error', ALERT_DANGER, '', catagoerys)
     }
 }
