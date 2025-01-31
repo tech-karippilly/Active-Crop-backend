@@ -14,6 +14,10 @@ export const ADMIN_CUSTOMER_CREATE_PAGE = 'admin/customers/create'
 export const ADMIN_CUSTOMER_UPDATE_PAGE = 'admin/customers/update'
 
 export const USER_LOGIN_PAGE = 'user/auth/loginPage'
+export const USER_SIGNUP_PAGE ='user/auth/signup'
+export const USER_FORGOT_EMAIL_SEND_PAGE = 'user/auth/forgotEmail'
+export const USER_REST_EMAIL_PAGE = 'user/auth/forogtPassword'
+export const USER_OTP_VERIFY_PAGE='user/auth/otpVerify'
 
 export const USER_HOME_PAGE = 'user/home/homePage'
 export const USER_PRODUCT_PAGE = 'user/products/products'

@@ -1,6 +1,10 @@
 import { OTPModel, User } from "../../../models/index.js"
 import otpGenerator from 'otp-generator'
 import moment from "moment/moment.js"
+import { HTTP_SUCCESS } from "../../../constans/httpStatus.js"
+import { USER_OTP_VERIFY_PAGE } from "../../../constans/page.js"
+
+
 
 async function sendOtp(req, res) {
     try {
@@ -31,7 +35,7 @@ async function sendOtp(req, res) {
         const otpBody = new OTPModel(otpPayload);
 
         await otpBody.save();
-        res.status(200).redirect('/api/otp/verifyOtp')
+        res.status(200).redirect('/api/otp/verifyOtp',{alertMessage,alertType})
        
     } catch (error) {
         res.status(500).json({message:'Internal server Error',status:500})
@@ -78,6 +82,10 @@ async function resendOtp(req, res) {
     }
 }
 
+function OtpVerifyPage(req,res){
+    res.status(HTTP_SUCCESS).render(USER_OTP_VERIFY_PAGE,{alertMessage:'',alertType:'',redirectUrl:''})
+}
+
 async function verifyOtp(req, res) {
     try {
         const { OtpVerify } = req.body
@@ -109,5 +117,6 @@ async function verifyOtp(req, res) {
 export {
     sendOtp,
     resendOtp,
+    OtpVerifyPage,
     verifyOtp
 }

@@ -39,6 +39,11 @@ export const USER_CATAGOERY= '/catagoery'
 export const USER_PRODUCTS ='/products'
 export const USER_PRODUCT_DETAILS = '/details/:id'
 
+export const USER_LOGIN_BASE = '/auth'
+export const USER_LOGIN = '/login'
+export const USER_SIGNUP ='/signup'
+export const USER_OTP_BASE = '/otp'
+export const USER_OTP_VERIFY = '/verifyotp'
 
 
 

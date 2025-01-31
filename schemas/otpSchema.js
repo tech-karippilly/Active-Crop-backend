@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mailSender from '../utils/mailSender.js'
+import mailSender, { sendVerificationEmail } from '../utils/mailSender.js'
 
 const otpSchema = new mongoose.Schema({
     email:{
@@ -19,18 +19,7 @@ const otpSchema = new mongoose.Schema({
     timestamps:true
 })
 
-async function sendVerificationEmail(email, otp) {
-    try {
-      const mailResponse = await mailSender(
-        email,
-        "Verification Email",
-        `<h1>Please confirm your OTP</h1>
-         <p>Here is your OTP code: ${otp}</p>`
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
+
 
   otpSchema.pre("save", async function (next) {
     // Only send an email when a new document is created

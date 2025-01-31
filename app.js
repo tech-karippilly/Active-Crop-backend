@@ -22,7 +22,7 @@ import customerRoute from './routes/customer/index.js'
 import userProductsRoute from './routes/app/products/index.js'
 import homeRoute from './routes/app/home/index.js'
 
-import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE, USER_HOME, USER_PRODUCTS } from "./constans/endpoints.js";
+import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE, USER_HOME, USER_LOGIN, USER_LOGIN_BASE, USER_OTP_BASE, USER_PRODUCTS } from "./constans/endpoints.js";
 import { renderHomepage } from "./controllers/app/home/index.js";
 const app = express()
 
@@ -77,8 +77,8 @@ app.use(ADMIN_PRODUCTS_BASE, productRoute)
 app.use('/api/customer',customerRoute)
 
 //USER ROUTES
-app.use('/api/auth', userRoute)
-app.use('/api/otp/', otpRoute)
+app.use(USER_LOGIN_BASE, userRoute)
+app.use(USER_OTP_BASE, otpRoute)
 app.use('/api/auth/token', tokenRoute)
 app.use(USER_PRODUCTS,userProductsRoute)
 

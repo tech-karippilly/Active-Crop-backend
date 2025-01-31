@@ -22,12 +22,20 @@
 
 <body>
 
-  <div class="alert-box alert-box-hide" id="alert-box">
+  <div class="alert-box " id="alert-box">
     <% if (alertMessage) { %>
-      <div class="alert alert-<%= alertType %>" id="alert">
-        <%= alertMessage %>
-      </div>
+      <% if (typeof alertMessage === 'string') { %>
+        <div class="alert alert-<%= alertType %>" id="alert">
+          <%= alertMessage %>
+        </div>
+      <% } else { %>
+        <% Object.entries(alertMessage).forEach(([key, message]) => { %>
+          <div class="alert alert-<%= alertType %>" id="alert">
+            <%= message %>
+          </div>
+        <% }) %>
       <% } %>
+    <% } %>
   </div>
 
   <section class="login-form-section">
@@ -36,29 +44,32 @@
       <div class="card-body">
         <h5 class="card-title text-center">Create Account</h5>
 
-        <form id="signup-form" method="post" action="/api/auth/signup">
+        <form id="signup-form" method="post" action="/auth/signup">
 
-          <div class="mb-3">
-            <label for="firstName" class="form-label lable-text">First Name</label>
-            <input type="text" class="form-control" name="firstName" id="firstName" required>
-          </div>
-          <div class="mb-3">
-            <label for="lastName" class="form-label lable-text">Last Name</label>
-            <input type="text" class="form-control" name="lastName" id="lastName" required>
+          <div class="row">
+            <div class="col">
+              <label for="firstName" class="form-label lable-text">First Name</label>
+              <input type="text" class="form-control" name="firstName" id="firstName" required>
+            </div>
+            <div class="col">
+              <label for="lastName" class="form-label lable-text">Last Name</label>
+              <input type="text" class="form-control" name="lastName" id="lastName" required>
+            </div>
           </div>
           <div class="mb-3">
             <label for="lastName" class="form-label lable-text">User Name</label>
             <input type="text" class="form-control" name="userName" id="lastName" required>
           </div>
-          <div class="mb-3">
-            <label for="lastName" class="form-label lable-text">Phone</label>
-            <input type="text" class="form-control" name="phone" id="lastName" required>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label lable-text">Email address</label>
-            <input type="email" class="form-control" name="email" id="exampleInputEmail1"
-              aria-describedby="emailHelp" required>
-
+          <div class="row">
+            <div class="col">
+              <label for="lastName" class="form-label lable-text">Phone</label>
+              <input type="text" class="form-control" name="phone" id="lastName" required>
+            </div>
+            <div class="col">
+              <label for="email" class="form-label lable-text">Email address</label>
+              <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp"
+                required>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -71,10 +82,10 @@
           </div>
 
           <div class="btn-contianer mb-3">
-            <button type="submit" class="btn " >Create Account</button>
+            <button type="submit" class="btn ">Create Account</button>
           </div>
           <div class=" btn-contianer mb-3 ">
-            <a class="link " href="/api/auth/login">Already have account</a>
+            <a class="link " href="/auth/login">Already have account</a>
           </div>
         </form>
       </div>

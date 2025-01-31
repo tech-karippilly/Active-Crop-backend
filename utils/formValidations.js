@@ -59,6 +59,34 @@ function productFormValid(product_name, price, stock_quantity) {
     return Object.keys(errors).length === 0 ? true : errors;
 }
 
+export function signUpFormValid(firstName,lastName,email,password,userName,phone,confirmPassword){
+    const errors = {};
+
+    if (!isNameValid(firstName)) {
+        errors.firstName = "First name must contain at least 2 alphabetic characters.";
+    }
+    if (!isNameValid(lastName)) {
+        errors.lastName = "Last name must contain at least 2 alphabetic characters.";
+    }
+    if (!isEmailValid(email)) {
+        errors.email = "Invalid email format.";
+    }
+    if (!isPasswordValid(password)) {
+        errors.password = "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+    if (password !== confirmPassword) {
+        errors.confirmPassword = "Passwords do not match.";
+    }
+    if (!isUserNameValid(userName)) {
+        errors.userName = "Username can only contain alphanumeric characters.";
+    }
+    if (!isValidPhoneNumber(phone)) {
+        errors.phone = "Phone number must be exactly 10 digits.";
+    }
+    
+    return Object.keys(errors).length === 0 ? true : errors;
+}
+
 
 export{
     isAdminLoginFormValid,

@@ -1,16 +1,21 @@
-import { Role, Token, User } from '../../../models/index.js'
+import { OTPModel, Role, Token, User } from '../../../models/index.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { sendresetMail } from '../../../utils/mailSender.js';
 import { sendOtp } from '../otp/index.js';
-import { isUserLoginFormValid } from '../../../utils/formValidations.js';
-import { HTTP_BAD_REQUEST, HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, HTTP_SUCCESS } from '../../../constans/httpStatus.js';
+import { isUserLoginFormValid, signUpFormValid } from '../../../utils/formValidations.js';
+import { HTTP_BAD_REQUEST, HTTP_CONFICT, HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, HTTP_SUCCESS } from '../../../constans/httpStatus.js';
 import { ALERT_DANGER, ALERT_SUCCESS, ALERT_WARNING } from '../../../utils/alert.js';
-import { USER_LOGIN_PAGE } from '../../../constans/page.js';
+import { USER_FORGOT_EMAIL_SEND_PAGE, USER_LOGIN_PAGE, USER_REST_EMAIL_PAGE, USER_SIGNUP_PAGE } from '../../../constans/page.js';
+import otpGenerator from 'otp-generator';
 dotenv.config();
 
 async function getUser(req, res) {
     res.status(200).send('working')
+}
+
+function loginPageUser (req,res){
+    res.status(200).render('user/auth/loginPage',{ alertMessage: '', alertType: '', redirectUrl: '' })
 }
 
 async function loginUser(req, res) {
@@ -59,9 +64,6 @@ async function loginUser(req, res) {
     }
 }
 
-const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl) => {
-    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl })
-}
 
 async function googleLogin(req, res) {
     try {
@@ -90,10 +92,20 @@ async function googleLogin(req, res) {
     }
 }
 
-async function createUser(req, res) {
-    const { firstName, lastName, email, password, userName, phone } = req.body
 
+function createUserPage(req,res){
+    renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'','','')
+}
+
+async function createUser(req, res) {
     try {
+        const { firstName, lastName, email, password, userName, phone,confirmPassword } = req.body
+        const validation = signUpFormValid(firstName, lastName, email, password, userName, phone, confirmPassword);
+        
+        if (validation !== true) {
+         return   renderPage(res,HTTP_BAD_REQUEST,USER_SIGNUP_PAGE,validation,ALERT_WARNING,'')
+        }
+
         const userRole = await Role.findOne({ roleName: 'User' });
         const user = {
             firstName,
@@ -105,23 +117,42 @@ async function createUser(req, res) {
             isBlocked: false,
             role: userRole._id
         }
-
-
         const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
 
         if (existingUser) {
-            res.status(200).render('user/auth/signUp', { alertMessage: '', alertType: '', redirectUrl: '' })
-            return res.status(400).render('user/auth/signUp', { alertMessage: 'Username or email already exists', alertType: 'Warnning', redirectUrl: '' })
+            return   renderPage(res,HTTP_CONFICT,USER_SIGNUP_PAGE,'Username or email already exists',ALERT_DANGER,'')
         }
-
         const newUser = new User(user);
+       
+
+        let otp = otpGenerator.generate(6, {
+            upperCaseAlphabets: false,
+            lowerCaseAlphabets: false,
+            specialChars: false,
+        });
+
+        let result = OTPModel.findOne({ otp: otp })
+
+        while (result) {
+            otp = otpGenerator.generate(6, {
+                upperCaseAlphabets: false,
+            })
+            result = await OTPModel.findOne({ otp: otp });
+        }
+        const otpPayload = { email, otp };
+        const otpBody = new OTPModel(otpPayload);
+
+        await otpBody.save();
         await newUser.save();
-        sendOtp(req, res);
-        //   res.status(201).render('user/auth/signUp',{ alertMessage: 'User created successfully', alertType: 'Success', redirectUrl: '/api/auth/login' });
+        renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'User Created Success fully and OTP send',ALERT_SUCCESS,'/otp/verifyOtp')
     } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+
+        return   renderPage(res,HTTP_SERVER_ERROR,USER_SIGNUP_PAGE,'Internal server error',ALERT_DANGER,'')
     }
+}
+
+function forgotEmailSendPage(req,res){
+    renderPage(res,HTTP_SUCCESS,USER_FORGOT_EMAIL_SEND_PAGE,'','','')
 }
 
 async function forgotEmailSend(req, res) {
@@ -141,6 +172,10 @@ async function forgotEmailSend(req, res) {
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error", status: 500 })
     }
+}
+
+function forgotPasswordPage(req,res){
+    renderPage(res,HTTP_SUCCESS,USER_REST_EMAIL_PAGE,'','','')
 }
 
 async function resetPassword(req, res) {
@@ -172,13 +207,22 @@ const googelAuth = async (req, res) => {
     res.redirect(url);
 }
 
+const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl) => {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl })
+}
+
+
 
 export {
     getUser,
+    loginPageUser,
     loginUser,
+    createUserPage,
     createUser,
+    forgotEmailSendPage,
     forgotEmailSend,
+    forgotPasswordPage,
     resetPassword,
     googelAuth,
-    googleLogin
+    googleLogin,
 }

@@ -1,12 +1,13 @@
 import express from 'express'
-import { resendOtp, sendOtp, verifyOtp } from '../../../controllers/auth/otp/index.js'
-import { OtpVerify } from '../../../controllers/user/auth/index.js'
+import { OtpVerifyPage, resendOtp, sendOtp, verifyOtp } from '../../../controllers/auth/otp/index.js'
+import { USER_OTP_VERIFY } from '../../../constans/endpoints.js'
+
 
 const route = express.Router()
 
 route.post('/sendOtp',sendOtp)
-route.get('/verifyOtp',OtpVerify)
-route.post('/verifyOtp',verifyOtp)
+route.get(USER_OTP_VERIFY,OtpVerifyPage)
+route.post(USER_OTP_VERIFY,verifyOtp)
 route.post('/resentOtp',resendOtp)
 
 export default route
