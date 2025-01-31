@@ -3,7 +3,7 @@ import otpGenerator from 'otp-generator'
 import moment from "moment/moment.js"
 import { HTTP_SUCCESS } from "../../../constans/httpStatus.js"
 import { USER_OTP_VERIFY_PAGE } from "../../../constans/page.js"
-
+import jwt from 'jsonwebtoken'
 
 
 async function sendOtp(req, res) {
@@ -106,9 +106,24 @@ async function verifyOtp(req, res) {
         const user  = await User.findOne({email:getOtp.email})
 
         user.isVerifyed =true
+
+        const accessToken = jwt.sign(
+            { userId: user._id, email: user.email, role: user.role },
+            process.env.JWT_SECRET_ACCESS_TOKEN,
+            { expiresIn: '15m' }
+        );
+
+        const refreshToken = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET_REFRESH_TOKEN,
+            { expiresIn: '1d', algorithm: 'HS256' }
+        );
+        req.session.accessToken = accessToken;
+        req.session.refreshToken = refreshToken;
+
         await  user.save()
 
-        return res.status(200).render('user/auth/otpVerify',{ alertMessage: 'OTP verified successfully', alertType: 'success', redirectUrl: '/api/auth/login' })
+        return res.status(200).render('user/auth/otpVerify',{ alertMessage: 'OTP verified successfully', alertType: 'success', redirectUrl: '/' })
     } catch (error) {
         res.status(500).render('user/auth/otpVerify',{ alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
     }

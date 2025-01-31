@@ -20,7 +20,7 @@
         rel="stylesheet">
 </head>
 
-<body>
+<body class="d-flex flex-coloumn">
 
     <div class="alert-box" id="alert-box">
         <% if (alertMessage) { %>
@@ -36,7 +36,7 @@
             <div class="card-body">
                 <h5 class="card-title text-center">OTP verify</h5>
 
-                <form id="otpVerifyForm" method="post" action="/api/otp/verifyOtp">
+                <form id="otpVerifyForm" method="post" action="/otp/verifyOtp">
 
                     <div class="mb-3">
                         <label for="otpVerify" class="form-label lable-text">OTP Verify</label>
@@ -63,6 +63,7 @@
         const redirectUrl = "<%= redirectUrl %>";
         if (redirectUrl && redirectUrl.trim() !== "") {
             setTimeout(() => {
+                window.localStorage.removeItem('userName')
                 window.location.href = redirectUrl;
             }, 2000)
 
@@ -71,13 +72,13 @@
             event.preventDefault(); // Prevent the default link behavior
 
             try {
-                const response = await fetch('/api/otp/resentOtp', {
+                const response = await fetch('/otp/resentOtp', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        userName: 'vishnu03'
+                        userName: window.localStorage.getItem('userName')
                     })
                 });
 

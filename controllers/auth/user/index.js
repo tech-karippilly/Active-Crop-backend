@@ -144,7 +144,8 @@ async function createUser(req, res) {
 
         await otpBody.save();
         await newUser.save();
-        renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'User Created Success fully and OTP send',ALERT_SUCCESS,'/otp/verifyOtp')
+
+        renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'User Created Success fully and OTP send',ALERT_SUCCESS,'/otp/verifyOtp',userName)
     } catch (error) {
 
         return   renderPage(res,HTTP_SERVER_ERROR,USER_SIGNUP_PAGE,'Internal server error',ALERT_DANGER,'')
@@ -207,8 +208,8 @@ const googelAuth = async (req, res) => {
     res.redirect(url);
 }
 
-const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl) => {
-    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl })
+const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl,userName) => {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl ,userName})
 }
 
 
