@@ -1,9 +1,8 @@
-import { OTPModel, Role, Token, User } from '../../../models/index.js'
+import { OTPModel, Role, User } from '../../../models/index.js'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { sendresetMail } from '../../../utils/mailSender.js';
-import { sendOtp } from '../otp/index.js';
-import { isUserLoginFormValid, signUpFormValid } from '../../../utils/formValidations.js';
+import { isResetPasswordValid, isUserLoginFormValid, signUpFormValid } from '../../../utils/formValidations.js';
 import { HTTP_BAD_REQUEST, HTTP_CONFICT, HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_SERVER_ERROR, HTTP_SUCCESS } from '../../../constans/httpStatus.js';
 import { ALERT_DANGER, ALERT_SUCCESS, ALERT_WARNING } from '../../../utils/alert.js';
 import { USER_FORGOT_EMAIL_SEND_PAGE, USER_LOGIN_PAGE, USER_REST_EMAIL_PAGE, USER_SIGNUP_PAGE } from '../../../constans/page.js';
@@ -14,8 +13,8 @@ async function getUser(req, res) {
     res.status(200).send('working')
 }
 
-function loginPageUser (req,res){
-    res.status(200).render('user/auth/loginPage',{ alertMessage: '', alertType: '', redirectUrl: '' })
+function loginPageUser(req, res) {
+    res.status(200).render('user/auth/loginPage', { alertMessage: '', alertType: '', redirectUrl: '' })
 }
 
 async function loginUser(req, res) {
@@ -79,7 +78,7 @@ async function googleLogin(req, res) {
             process.env.JWT_SECRET_REFRESH_TOKEN,
             { expiresIn: '1d', algorithm: 'HS256' }
         );
-        
+
         req.session.accessToken = accessToken
         req.session.refreshToke = refreshToken
 
@@ -93,17 +92,17 @@ async function googleLogin(req, res) {
 }
 
 
-function createUserPage(req,res){
-    renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'','','')
+function createUserPage(req, res) {
+    renderPage(res, HTTP_SUCCESS, USER_SIGNUP_PAGE, '', '', '')
 }
 
 async function createUser(req, res) {
     try {
-        const { firstName, lastName, email, password, userName, phone,confirmPassword } = req.body
+        const { firstName, lastName, email, password, userName, phone, confirmPassword } = req.body
         const validation = signUpFormValid(firstName, lastName, email, password, userName, phone, confirmPassword);
-        
+
         if (validation !== true) {
-         return   renderPage(res,HTTP_BAD_REQUEST,USER_SIGNUP_PAGE,validation,ALERT_WARNING,'')
+            return renderPage(res, HTTP_BAD_REQUEST, USER_SIGNUP_PAGE, validation, ALERT_WARNING, '')
         }
 
         const userRole = await Role.findOne({ roleName: 'User' });
@@ -120,10 +119,10 @@ async function createUser(req, res) {
         const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
 
         if (existingUser) {
-            return   renderPage(res,HTTP_CONFICT,USER_SIGNUP_PAGE,'Username or email already exists',ALERT_DANGER,'')
+            return renderPage(res, HTTP_CONFICT, USER_SIGNUP_PAGE, 'Username or email already exists', ALERT_DANGER, '')
         }
         const newUser = new User(user);
-       
+
 
         let otp = otpGenerator.generate(6, {
             upperCaseAlphabets: false,
@@ -145,15 +144,15 @@ async function createUser(req, res) {
         await otpBody.save();
         await newUser.save();
 
-        renderPage(res,HTTP_SUCCESS,USER_SIGNUP_PAGE,'User Created Success fully and OTP send',ALERT_SUCCESS,'/otp/verifyOtp',userName)
+        renderPage(res, HTTP_SUCCESS, USER_SIGNUP_PAGE, 'User Created Success fully and OTP send', ALERT_SUCCESS, '/otp/verifyOtp', userName)
     } catch (error) {
 
-        return   renderPage(res,HTTP_SERVER_ERROR,USER_SIGNUP_PAGE,'Internal server error',ALERT_DANGER,'')
+        return renderPage(res, HTTP_SERVER_ERROR, USER_SIGNUP_PAGE, 'Internal server error', ALERT_DANGER, '')
     }
 }
 
-function forgotEmailSendPage(req,res){
-    renderPage(res,HTTP_SUCCESS,USER_FORGOT_EMAIL_SEND_PAGE,'','','')
+function forgotEmailSendPage(req, res) {
+    renderPage(res, HTTP_SUCCESS, USER_FORGOT_EMAIL_SEND_PAGE, '', '', '')
 }
 
 async function forgotEmailSend(req, res) {
@@ -163,20 +162,21 @@ async function forgotEmailSend(req, res) {
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(404).render('user/auth/forgotEmail', { alertMessage: 'User not Found', alertType: 'Danger', redirectUrl: '' })
+            return renderPage(res, HTTP_CONFICT, USER_FORGOT_EMAIL_SEND_PAGE, 'User not Found', ALERT_DANGER, '')
         }
 
-        const forgotPasswrodPage = `http://localhost:3000/api/auth/reset-password?email=${email}`
+        const forgotPasswrodPage = `http://localhost:3000/auth/reset-password?email=${email}`
 
         sendresetMail(email, forgotPasswrodPage)
-        res.status(200).render('user/auth/forgotEmail', { alertMessage: 'Email send sucessfully', alertType: 'Success', redirectUrl: '/api/auth/login' })
+        renderPage(res, HTTP_SUCCESS, USER_FORGOT_EMAIL_SEND_PAGE, 'Email send sucessfully', ALERT_SUCCESS, '/auth/login')
+
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", status: 500 })
+        renderPage(res, HTTP_SERVER_ERROR, USER_FORGOT_EMAIL_SEND_PAGE, 'Internal Server Error', ALERT_SUCCESS, '')
     }
 }
 
-function forgotPasswordPage(req,res){
-    renderPage(res,HTTP_SUCCESS,USER_REST_EMAIL_PAGE,'','','')
+function forgotPasswordPage(req, res) {
+    renderPage(res, HTTP_SUCCESS, USER_REST_EMAIL_PAGE, '', '', '')
 }
 
 async function resetPassword(req, res) {
@@ -184,22 +184,25 @@ async function resetPassword(req, res) {
     try {
         const email = req.query.email;
         const { password, confirmPassword } = req.body
+        const validation = isResetPasswordValid(password, confirmPassword)
+
+
+        if (validation !== true) {
+            return renderPage(res, HTTP_BAD_REQUEST, USER_REST_EMAIL_PAGE, validation, ALERT_WARNING, '')
+        }
+
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(404).render('user/auth/forogtPassword', { alertMessage: 'User not Found', alertType: 'Danger', redirectUrl: '' })
+            return renderPage(res, HTTP_NOT_FOUND, USER_REST_EMAIL_PAGE, 'User not Found', ALERT_DANGER, '')
         }
+        
+        user.password = password
+        await user.save()
 
-        if (password === confirmPassword) {
-            user.password = password
-            await user.save()
-
-            res.status(200).json({ message: 'Password Changed ', redirect: '/api/auth/login' })
-        } else {
-            return res.status(400).render('user/auth/forogtPassword', { alertMessage: 'Password Mismatch', alertType: 'Danger', redirectUrl: '' })
-        }
+        res.status(HTTP_SUCCESS).json({message:"Password Changed",redirect:'/auth/login'})
     } catch (error) {
-        res.status(500).render('user/auth/forogtPassword', { alertMessage: 'Internal Server Error', alertType: 'Danger', redirectUrl: '' })
+        renderPage(res,HTTP_SERVER_ERROR,USER_REST_EMAIL_PAGE,'Internal Server Error',ALERT_DANGER,'')
     }
 }
 
@@ -208,8 +211,8 @@ const googelAuth = async (req, res) => {
     res.redirect(url);
 }
 
-const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl,userName) => {
-    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl ,userName})
+const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl, userName) => {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, userName })
 }
 
 

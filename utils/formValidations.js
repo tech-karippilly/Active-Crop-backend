@@ -87,10 +87,24 @@ export function signUpFormValid(firstName,lastName,email,password,userName,phone
     return Object.keys(errors).length === 0 ? true : errors;
 }
 
+function isResetPasswordValid(password,confirmPassword){
+    const errors = {};
+
+    if(!isPasswordValid(password)){
+        errors.password = "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+
+    if (password !== confirmPassword) {
+        errors.confirmPassword = "Passwords do not match.";
+    }
+
+    return Object.keys(errors).length === 0 ? true : errors;
+}
 
 export{
     isAdminLoginFormValid,
     isAdminSignupFormValid,
     isUserLoginFormValid,
-    productFormValid
+    productFormValid,
+    isResetPasswordValid
 }

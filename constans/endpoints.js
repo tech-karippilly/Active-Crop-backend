@@ -42,6 +42,10 @@ export const USER_PRODUCT_DETAILS = '/details/:id'
 export const USER_LOGIN_BASE = '/auth'
 export const USER_LOGIN = '/login'
 export const USER_SIGNUP ='/signup'
+export const USER_RESET_EMAIL = '/reset-mail'
+export const USER_RESET_PASSWORD = '/reset-password'
+
+
 export const USER_OTP_BASE = '/otp'
 export const USER_OTP_VERIFY = '/verifyotp'
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { USER_ATUH_GOOGLE_CALLBACK, USER_AUTH_GOOGLE, USER_LOGIN, USER_SIGNUP } from "../../../constans/endpoints.js";
+import { USER_ATUH_GOOGLE_CALLBACK, USER_AUTH_GOOGLE, USER_LOGIN, USER_RESET_EMAIL, USER_RESET_PASSWORD, USER_SIGNUP } from "../../../constans/endpoints.js";
 import Passport from "passport";
 import createSatergyGoogle from "../../../utils/passport.js";
 import { HTTP_SUCCESS } from "../../../constans/httpStatus.js";
@@ -37,11 +37,11 @@ route.get('/logout', (req, res) => {
 route.get(USER_SIGNUP, createUserPage)
 route.post(USER_SIGNUP, createUser)
 
-route.get('/reset-mail', forgotEmailSendPage)
-route.post('/reset-mail', forgotEmailSend)
+route.get(USER_RESET_EMAIL, forgotEmailSendPage)
+route.post(USER_RESET_EMAIL, forgotEmailSend)
 
-route.get('/reset-password', forgotPasswordPage)
-route.post('/reset-password', resetPassword)
+route.get(USER_RESET_PASSWORD, forgotPasswordPage)
+route.post(USER_RESET_PASSWORD, resetPassword)
 
 route.get('/google', googelAuth)
 export default route
