@@ -71,7 +71,7 @@ app.use('/uploads', express.static('uploads'));
 // ADMIN ROUTES
 app.use(ADMIN_AUTH_BASE, adiminAuthRoute)
 app.use('/api/admin/role', roleAuth)
-app.use('/api/admin/dashboard',dashboardRoute)
+app.use('/admin/dashboard',dashboardRoute)
 app.use(ADMIN_CATAGOERY_BASE, categoeryRoute)
 app.use(ADMIN_PRODUCTS_BASE, productRoute)
 app.use('/api/customer',customerRoute)
