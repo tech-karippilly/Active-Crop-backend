@@ -7,7 +7,7 @@ async function productsPage(req,res) {
         const {id} = req.params
         const products = await Product.find({catagoery_id:id})
         const catagories = await Categoery.find()
-        renderPage(res,USER_PRODUCT_PAGE,HTTP_SUCCESS,true,products,catagories)
+        res.status(HTTP_SUCCESS).render(USER_PRODUCT_PAGE,{isLogin:false,products,catagories,activeCata:id,})
     }catch(error){
 
     }
@@ -15,17 +15,25 @@ async function productsPage(req,res) {
 
 async function productDetailsPage(req,res){
     try{
-        const {id} = req.params
+        const {id,cataid} = req.params
         const products = await Product.findById({_id:id})
         const catagories = await Categoery.find()
         const reviews = await Review.find({ 'product.productId': id })
-        renderPage(res,USER_PRODUCT_DETAILS_PAGE,HTTP_SUCCESS,true,products,catagories,reviews)
+        const activeCata = await Categoery.findById(cataid)
+
+      return  res.status(HTTP_SUCCESS).render(USER_PRODUCT_DETAILS_PAGE,{
+        isLogin:false,
+        products,
+        catagories,
+        activeCata:cataid,
+        activeCataName: activeCata ? activeCata.catagoery_name : "Category",
+        reviews})
     }catch(error){
 
     }
 }
 
-const renderPage =(res,pageName,status,isLogin,products,catagories,reviews)=>{
+const renderPage =(res,pageName,status,isLogin,products,catagories,reviews,)=>{
     res.status(status).render(pageName,{isLogin,products,catagories,reviews})
 }
 

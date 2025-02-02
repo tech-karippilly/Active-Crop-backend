@@ -7,8 +7,9 @@
     <title>Active Cropt | Products</title>
     <link rel="shortcut icon" href="../../../public/asstes/images/logo.jpg" type="image/x-icon">
 
-    <link rel="stylesheet" href="../../../public/styles/productStyles.css">
+
     <link rel="stylesheet" href="../../public/styles/homePage.css">
+    <link rel="stylesheet" href="../../../public/styles/productStyles.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -22,7 +23,7 @@
 </head>
 
 <body>
-    <div class="bg-light d-flex justify-content-end align-items-center" style="height: 2rem;">
+    <section class="bg-light d-flex justify-content-end align-items-center" style="height: 2rem;">
         <div class="d-flex gap-3 me-3">
             <div class="d-flex align-items-center">
                 <i class="fa fa-whatsapp me-1"></i>
@@ -45,9 +46,9 @@
                         <%}%>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="header-section d-flex justify-content-center">
+    <section class="header-section d-flex justify-content-center">
         <div class="row   w-100 h-100  d-flex  justify-content-between">
             <div class="col-4 d-flex justify-content-center align-items-center h-100 ">
                 <div class="image-container">
@@ -59,35 +60,45 @@
             </div>
             <div class="col-5 p-3 d-flex align-items-center justify-content-between">
 
-                <!-- Search Form -->
                 <form class="d-flex w-75">
                     <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
                     <button class="btn btn-light" type="submit">Search</button>
                 </form>
 
-                <!-- Cart Icon with Badge -->
                 <div class="position-relative">
                     <button class="btn btn-light position-relative">
-                        <i class="fas fa-shopping-cart"></i> <!-- FontAwesome Cart Icon -->
+                        <i class="fas fa-shopping-cart"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            3 <!-- Change this number dynamically -->
+                            3
                         </span>
                     </button>
                 </div>
 
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="categoery-container">
+    <section class="categoery-container">
         <ul class="categoery-list">
             <% catagories.forEach((catagories)=>{ %>
-                <li><a href="/products/<%=catagories._id %>" class="btn text-white btn-hover-underline">
+                <li><a href="/products/<%=catagories._id %>"
+                        class="btn  btn-hover-underline <%= catagories._id.toString() === activeCata.toString() ?'active-category'  : 'normal-catagoery' %>">
                         <%= catagories.catagoery_name %>
                     </a></li>
                 <% })%>
         </ul>
-    </div>
+    </section>
+
+    <nav aria-label="breadcrumb ms-5 m-1">
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/<%= activeCata %>"><%= activeCataName %></a></li>
+            <li>
+                <%= products.product_name %>
+            </li>
+        </ul>
+    </nav>
+
     <div class="condent-section">
         <div class='container w-100 h-100 pt-5'>
             <div class="row  w-100 h-100 ">
@@ -104,11 +115,12 @@
                                         <% } else { %>
                                             <div class="carousel-item active">
                                                 <img src="/images/no-image.jpg" class="d-block w-100"
-                                                    alt="No Image Available" style="max-height: 300px; object-fit: cover;">
+                                                    alt="No Image Available"
+                                                    style="max-height: 300px; object-fit: cover;">
                                             </div>
                                             <% } %>
                         </div>
-    
+
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
                             data-bs-slide="prev">
                             <i class="fa-solid fa-chevron-left text-dark fs-1" aria-hidden="true"></i>
@@ -116,13 +128,13 @@
                         </button>
                         <button class="carousel-control-next " type="button" data-bs-target="#carouselExample"
                             data-bs-slide="next">
-    
+
                             <i class="fa-solid fa-chevron-right text-dark fs-1" aria-hidden="true"></i>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
-    
+
                 <div class="col-7 h-100 ">
                     <div class="container col-controller d-flex flex-column justify-content-center align-items-start">
                         <div class="mb-4">
@@ -130,7 +142,7 @@
                                 <%= products.product_name %>
                             </h1>
                         </div>
-    
+
                         <div class="mb-4">
                             <p>
                                 <%= products.description %>
@@ -148,7 +160,7 @@
                                 </div>
                             </div>
                         </div>
-    
+
                         <% if(products.stock_quentity=='0' ) { %>
                             <div class="mb-4">
                                 <h4 class="text-danger">Product out of Stock</h4>
@@ -163,28 +175,28 @@
                                     </div>
                                 </div>
                                 <% } %>
-    
+
                     </div>
                 </div>
             </div>
-    
+
             <div>
                 <h1>Rating and Reviews</h1>
-    
+
                 <div class="container">
                     <% if(reviews && reviews.length===0){ %>
                         <h5 class="text-secondary">No reviews yet to display</h5>
                         <%}else{ %>
-    
+
                             <% } %>
                 </div>
             </div>
-    
+
         </div>
     </div>
 
- 
-    <div class="footet-container">
+
+    <footer class="footet-container">
         <div class="row footer-condent">
             <div class="col aboutus-container">
                 <p>
@@ -227,17 +239,10 @@
         <div class="row copyright-container">
             <p>copyright@activecrop.com</p>
         </div>
-    </div>
-
-
-    <script>
-    </script>
+    </footer>
 
     <script src="https://kit.fontawesome.com/88f2b93054.js" crossorigin="anonymous"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>
