@@ -1,4 +1,4 @@
-import { HTTP_SUCCESS } from "../../../constans/httpStatus.js"
+import { HTTP_SERVER_ERROR, HTTP_SUCCESS } from "../../../constans/httpStatus.js"
 import { USER_HOME_PAGE } from "../../../constans/page.js"
 import { Categoery } from "../../../models/index.js"
 
@@ -12,7 +12,7 @@ const renderHomepage = async (req,res) =>{
         const user = req.session.userId
         return renderPage(USER_HOME_PAGE,res,HTTP_SUCCESS,user??false,catagories,)
     }catch(error){
-
+        return renderPage(USER_HOME_PAGE,res,HTTP_SERVER_ERROR,false,[])
     }
 }
 
