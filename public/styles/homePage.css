@@ -211,3 +211,17 @@ span {
 .col-items ul li{
    margin-top: 5px;
 }
+
+.catagoery-section{
+    width: 100%;
+    min-height: 20vh !important;
+    overflow: hidden;
+    padding: 0.5rem;
+    margin-top: 5rem;
+}
+.catagoery-image{
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    border-radius: 1rem;
+}
