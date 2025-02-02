@@ -140,7 +140,6 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     alertdiv.innerHTML = data.message
                     alertBox.classList.add('alert')
                     if (data.status === 200) {

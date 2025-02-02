@@ -58,7 +58,6 @@ async function adminLogin(req, res) {
 
         return renderResponse(ADMIN_LOGIN_PAGE, res, HTTP_SUCCESS, 'Login Successful', ALERT_SUCCESS, ADMIN_DASHBOARD);
     } catch (error) {
-        console.log(error.message)
         return renderResponse(ADMIN_LOGIN_PAGE,res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '');
     }
 }
@@ -133,7 +132,6 @@ async function adminLogout(req, res) {
             return res.status(400).json({ message: "Error in Token" })
         }
     } catch (error) {
-        console.log(error.message)
         res.status(500).json({ message: "Internal server Error" })
     }
 
