@@ -6,6 +6,7 @@ async function generateOtp(email){
 
     try{
         let otp = otpGenerator.generate(6, {
+            digits:true,
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
@@ -14,6 +15,7 @@ async function generateOtp(email){
         let result = OTPModel.findOne({ otp: otp })
         while (result) {
             otp = otpGenerator.generate(6, {
+                digits:true,
                 upperCaseAlphabets: false,
             })
             result = await OTPModel.findOne({ otp: otp });

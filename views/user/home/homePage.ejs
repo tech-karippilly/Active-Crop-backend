@@ -42,11 +42,11 @@
             </div>
             <div class="d-flex align-items-center">
                 <% if(isLogin) { %>
-                    <i class="fa-solid fa-circle-user fs-4"></i>
-                    <%}else { %>
-                        <span class="text-capitalize" style="cursor: pointer;"
-                            onclick="window.location.href='/auth/login'">Login</span>
-                        <%}%>
+                    <%= currentUser.firstName%>
+                        <%}else { %>
+                            <span class="text-capitalize" style="cursor: pointer;"
+                                onclick="window.location.href='/auth/login'">Login</span>
+                            <%}%>
             </div>
         </div>
     </div>
@@ -87,10 +87,10 @@
             <a href="/products/<%=catagories._id %>">
                 <img src="<%=  catagories.image%>" alt="catagoery-image" class="catagoery-image" />
             </a>
-        <% })%>
+            <% })%>
     </section>
 
-    
+
     <div class="footet-container">
         <div class="row footer-condent">
             <div class="col aboutus-container">

@@ -130,6 +130,7 @@ async function createUser(req, res) {
 
 
         let otp = otpGenerator.generate(6, {
+            digits:true,
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
@@ -139,6 +140,7 @@ async function createUser(req, res) {
 
         while (result) {
             otp = otpGenerator.generate(6, {
+                digits:true,
                 upperCaseAlphabets: false,
             })
             result = await OTPModel.findOne({ otp: otp });
