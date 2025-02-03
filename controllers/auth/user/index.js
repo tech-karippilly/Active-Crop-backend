@@ -130,18 +130,20 @@ async function createUser(req, res) {
 
 
         let otp = otpGenerator.generate(6, {
-            digits:true,
-            upperCaseAlphabets: false,
-            lowerCaseAlphabets: false,
-            specialChars: false,
+            digits: true,              
+                upperCaseAlphabets: false,  
+                lowerCaseAlphabets: false, 
+                specialChars: false 
         });
 
         let result = OTPModel.findOne({ otp: otp })
 
         while (result) {
             otp = otpGenerator.generate(6, {
-                digits:true,
-                upperCaseAlphabets: false,
+                digits: true,              
+                upperCaseAlphabets: false,  
+                lowerCaseAlphabets: false, 
+                specialChars: false 
             })
             result = await OTPModel.findOne({ otp: otp });
         }
