@@ -50,7 +50,7 @@ export const USER_OTP_BASE = '/otp'
 export const USER_OTP_VERIFY = '/verifyotp'
 
 
-
+export const LOGOUT = '/logout'
 
 
 

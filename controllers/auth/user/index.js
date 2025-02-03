@@ -220,6 +220,21 @@ const googelAuth = async (req, res) => {
     res.redirect(url);
 }
 
+const logoutUser = async(req,res)=>{
+    try{
+        req.session.destroy(err => {
+            if (err) {
+                return res.redirect('/'); 
+            }
+           
+            res.redirect('/'); 
+        });
+    }catch(error){
+        return res.redirect('/'); 
+    }
+}
+
+
 const renderPage = (res, status, pageName, alertMessage, alertType, redirectUrl, userName) => {
     res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, userName })
 }
@@ -238,4 +253,5 @@ export {
     resetPassword,
     googelAuth,
     googleLogin,
+    logoutUser
 }

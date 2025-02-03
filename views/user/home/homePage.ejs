@@ -42,7 +42,9 @@
             </div>
             <div class="d-flex align-items-center">
                 <% if(isLogin) { %>
-                    <%= currentUser.firstName%>
+                    <span style="cursor: pointer;" onclick="window.location.href='/auth/logout'">
+                        <%= currentUser.firstName %> 
+                      </span>
                         <%}else { %>
                             <span class="text-capitalize" style="cursor: pointer;"
                                 onclick="window.location.href='/auth/login'">Login</span>

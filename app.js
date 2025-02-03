@@ -1,5 +1,4 @@
 import express from "express";
-import cors from 'cors'
 import ConnectDb from "./config/db.js";
 import dotenv from 'dotenv';
 import session from "express-session";
@@ -22,8 +21,8 @@ import customerRoute from './routes/customer/index.js'
 import userProductsRoute from './routes/app/products/index.js'
 import homeRoute from './routes/app/home/index.js'
 
-import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE, USER_HOME, USER_LOGIN, USER_LOGIN_BASE, USER_OTP_BASE, USER_PRODUCTS } from "./constans/endpoints.js";
-import { renderHomepage } from "./controllers/app/home/index.js";
+import { ADMIN_AUTH_BASE, ADMIN_CATAGOERY_BASE, ADMIN_PRODUCTS_BASE, USER_HOME, USER_LOGIN_BASE, USER_OTP_BASE, USER_PRODUCTS } from "./constans/endpoints.js";
+
 const app = express()
 
 //DATABASE CONFIG
@@ -87,7 +86,7 @@ app.use(USER_PRODUCTS,userProductsRoute)
 app.use('/page',pageRoute)
 
 // INITIAL ROUTES
-app.get(USER_HOME,renderHomepage)
+app.get(USER_HOME,homeRoute)
 
 app.get('/admin',(req,res)=>{
     res.status(200).redirect(ADMIN_AUTH_BASE)

@@ -21,6 +21,7 @@ const renderHomepage = async (req,res) =>{
    }
 }
 
+
 export {
-    renderHomepage
+    renderHomepage,
 }

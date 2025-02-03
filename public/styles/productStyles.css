@@ -88,17 +88,14 @@ main{
     width: 100%;
     min-height: 60vh;
     max-height: auto;
-    padding: 2rem;
+    padding: 1rem;
 }
 
-
 .footet-container {
-    bottom: 0;
+    position: relative;
     width: 100%;
     min-height: 20vh;
-    margin: 0;
     background-color: #E5E8E8 ;
-
 }
 
 .footet-container .row {
@@ -113,7 +110,6 @@ main{
     align-items: center;
     bottom: 0;
     background-color: #52BE80;
-
 }
 
 .copyright-container p {
