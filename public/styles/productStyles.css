@@ -229,4 +229,21 @@ color: white !important;
     width: 100%;
     height: 5rem;
     overflow-x: scroll;
+    scrollbar-width: none;
+}
+
+.zoom-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.zoom-image {
+    transition: transform 0.3s ease-in-out;
+    cursor: crosshair;
+}
+
+.zoom-container:hover .zoom-image {
+    transform: scale(2); /* Zoom level */
 }
