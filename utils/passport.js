@@ -17,7 +17,7 @@ function createSatergyGoogle() {
     Passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:3000/api/auth/google/callback'
+        callbackURL: 'http://localhost:3000/auth/google/callback'
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             // Check if user exists in the database
@@ -31,6 +31,9 @@ function createSatergyGoogle() {
                     email: profile.emails[0].value,
                     avatar: profile.photos[0].value
                 });
+            }
+            if (user.isBlocked) {
+                return done(null, false, { message: 'Your account has been blocked. Please contact support.' });
             }
 
             return done(null, user); // Pass the user to Passport

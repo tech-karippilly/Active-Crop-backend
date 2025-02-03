@@ -16,7 +16,7 @@ route.post(USER_LOGIN, loginUser)
 
 route.get(USER_AUTH_GOOGLE, Passport.authenticate('google', { scope: ['profile', 'email'] }))
 
-route.get(USER_ATUH_GOOGLE_CALLBACK, Passport.authenticate('google', { failureRedirect: "/api/auth/login" }),googleLogin)
+route.get(USER_ATUH_GOOGLE_CALLBACK, Passport.authenticate('google', { failureRedirect: "/auth/login" }),googleLogin)
 
 route.get('/profile', (req, res) => {
     if (req.user) {

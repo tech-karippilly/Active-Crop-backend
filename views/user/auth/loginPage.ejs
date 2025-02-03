@@ -22,7 +22,7 @@
 
 <body>
 
-    <div class="alert-box alert-box-hide" id="alert-box">
+    <div class="alert-box " id="alert-box">
         <% if (alertMessage) { %>
             <div class="alert alert-<%= alertType %>" id="alert">
                 <%= alertMessage %>
@@ -62,7 +62,7 @@
   
                 </form>
                 <div class="iconContainer">
-                    <a href="/api/auth/google"  class="authButton">
+                    <a href="/auth/google"  class="authButton">
                         <i class='fab fa-google-plus-g' style="color: white;"></i>
                     </a>
                 </div>
