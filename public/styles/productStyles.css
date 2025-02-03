@@ -96,3 +96,8 @@ main{
 .copyright-container{
     position: relative !important;
 }
+.description-line-clamp {
+    width: 100%;
+    height: 5rem;
+    overflow-x: scroll;
+}

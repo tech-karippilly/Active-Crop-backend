@@ -102,10 +102,11 @@ export const updateProductPage = async (req, res) => {
         const { id } = req.params
         const catagoery = await Categoery.find({})
         const productDetails = await Product.findById(id);
-        renderPage(ADMIN_PRODUCT_EDIT_PAGE, res, HTTP_SUCCESS, '', '', '', productDetails, catagoery)
+        const activeCatagoery = await Categoery.findById(productDetails.catagoery_id)
+        renderPage(ADMIN_PRODUCT_EDIT_PAGE, res, HTTP_SUCCESS, '', '', '', productDetails, catagoery, activeCatagoery)
     } catch (error) {
         const catagoery = await Categoery.find({})
-        renderPage(ADMIN_PRODUCT_EDIT_PAGE, res, HTTP_SERVER_ERROR, 'Internal Server Error', '', '', [], catagoery)
+        renderPage(ADMIN_PRODUCT_EDIT_PAGE, res, HTTP_SERVER_ERROR, 'Internal Server Error', '', '', [], catagoery, {})
     }
 }
 
@@ -116,29 +117,48 @@ export const updateProduct = async (req, res) => {
 
         const productDetails = await Product.findById(product_id);
 
-        let product_images = {}
-        for (var i = 0; i < req.files.length; i++) {
-            product_images[i] = req.files[i].path
+        const isProductFormValid = productFormValid(product_name, price, stock_quantity)
+        console.log(isProductFormValid)
+        const catagoerys = await Categoery.find({})
+        const activeCatagoery = await Categoery.findById(productDetails.catagoery_id)
+        if (isProductFormValid !== true) {
+            return res.status(400).json({ message: isProductFormValid, status: 400 })
+            
         }
+        let product_images = new Array(4).fill(null);
+
+        for (let i = 0; i < 4; i++) {
+            product_images[i] = req.body[`product_image${i + 1}`] || null;
+        }
+        let fileIndex = 0;
+        for (let i = 0; i < 4; i++) {
+            if (!product_images[i] && req.files[fileIndex]) {
+                product_images[i] = req.files[fileIndex].path;
+                fileIndex++;
+            }
+        }
+        const imagesObject = Object.fromEntries(product_images.map((img, index) => [index, img]));
+
         if (productDetails) {
             productDetails.product_name = product_name
             productDetails.description = description
             productDetails.price = price
             productDetails.stock_quantity = stock_quantity
             productDetails.catagoery_id = catagoery_id
-            productDetails.images = product_images
+            productDetails.images = imagesObject
             await productDetails.save()
 
             return res.status(200).json({ message: "Product Updated Successfully", status: 200 })
         }
         res.status(404).json({ message: 'Product not found', statis: 404 })
     } catch (error) {
+        console.log(error.message)
         res.status(500).json({ message: "Internal Server Error", status: 500 })
     }
 }
 
-const renderPage = (pageName, res, status, alertMessage, alertType, redirectUrl, data, catagories) => {
-    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, data, catagories })
+const renderPage = (pageName, res, status, alertMessage, alertType, redirectUrl, data, catagories, activeCatagoery) => {
+    res.status(status).render(pageName, { alertMessage, alertType, redirectUrl, data, catagories, activeCatagoery })
 }
 
 
