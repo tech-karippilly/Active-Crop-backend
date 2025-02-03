@@ -39,23 +39,25 @@
             <div class="d-flex align-items-center">
                 <% if(isLogin) { %>
                     <span style="cursor: pointer;" onclick="window.location.href='/auth/logout'">
-                        <%= currentUser.firstName %> 
-                      </span>
-                        <%}else { %>
-                            <span class="text-capitalize" style="cursor: pointer;"
-                                onclick="window.location.href='/auth/login'">Login</span>
-                            <%}%>
+                        <%= currentUser.firstName %>
+                    </span>
+                    <%}else { %>
+                        <span class="text-capitalize" style="cursor: pointer;"
+                            onclick="window.location.href='/auth/login'">Login</span>
+                        <%}%>
             </div>
         </div>
     </div>
     <div class="header-section d-flex justify-content-center">
         <div class="row   w-100 h-100  d-flex  justify-content-between">
             <div class="col-4 d-flex justify-content-center align-items-center h-100 ">
-                <div class="image-container">
-                    <img src="../../../public/asstes/images/logo.jpg" class="image">
-                </div>
-                <div class="ml-2">
-                    <h1 class="text-white">Active Crop</h1>
+                <a href="/">
+                    <div class="image-container">
+                        <img src="../../../public/asstes/images/logo.jpg" class="image">
+                    </div>
+                </a>
+                <div class="logo-text-container">
+                    <h1>Active crop</h1>
                 </div>
             </div>
             <div class="col-5 p-3 d-flex align-items-center justify-content-between">
@@ -66,7 +68,7 @@
                 </form>
                 <div class="position-relative">
                     <button class="btn btn-light position-relative">
-                        <i class="fas fa-shopping-cart"></i> 
+                        <i class="fas fa-shopping-cart"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             3
                         </span>
