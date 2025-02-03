@@ -81,7 +81,7 @@
     <div class="categoery-container">
         <ul class="categoery-list">
             <% catagories.forEach((catagories)=>{ %>
-                <li><a href="/products/<%=catagories._id %>" class="btn text-white btn-hover-underline">
+                <li><a href="/products/<%=catagories._id %>" class="btn  btn-hover-underline <%= catagories._id.toString() === activeCata.toString() ?'active-category'  : 'normal-catagoery' %>">
                         <%= catagories.catagoery_name %>
                     </a></li>
                 <% })%>
@@ -99,7 +99,7 @@
                     <div class="row">
                         <% products.forEach(function(product) { %>
                             <div class="col-md-3 mb-4">
-                                <a href="/products/details/<%= product._id %>" class="text-decoration-none text-dark">
+                                <a href="/products/details/<%= product._id %>/<%= activeCata %>" class="text-decoration-none text-dark">
                                     <div class="card">
                                         <img src="/<%= product.images[0] %>" class="card-img-top"
                                             alt="<%= product.product_name %>"

@@ -67,6 +67,10 @@ async function loginUser(req, res) {
 async function googleLogin(req, res) {
     try {
         const user = req.user
+        
+        if (user.isBlocked){
+            return renderPage(res, HTTP_FORBIDDEN, USER_LOGIN_PAGE, 'Access Denied Please contact admin', ALERT_DANGER, '/auth/login')
+        }
         const accessToken = jwt.sign(
             { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET_ACCESS_TOKEN,
@@ -78,6 +82,7 @@ async function googleLogin(req, res) {
             process.env.JWT_SECRET_REFRESH_TOKEN,
             { expiresIn: '1d', algorithm: 'HS256' }
         );
+
 
         req.session.accessToken = accessToken
         req.session.refreshToke = refreshToken
