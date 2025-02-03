@@ -52,7 +52,7 @@ export const createCustomer = async (req, res) => {
 
         const newUser = new User(user);
         await newUser.save();
-        return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SUCCESS, 'User created successfully', ALERT_SUCCESS, '/api/customer')
+        return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SUCCESS, 'User created successfully', ALERT_SUCCESS, '/admin/customers')
     } catch (error) {
         return renderPage(ADMIN_CUSTOMER_CREATE_PAGE, res, HTTP_SERVER_ERROR, 'Internal server error', ALERT_DANGER, '')
     }
@@ -64,8 +64,7 @@ export const createCustomerPage = (req, res) => {
 
 export const getCoustomers = async (req, res) => {
     try {
-        const users = await User.find({})
-
+        const users = await User.find();
         renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SUCCESS, '', '', '', users)
     } catch (error) {
         renderPage(ADMIN_CUSTOMER_LIST_PAGE, res, HTTP_SUCCESS, 'Internal Server Error', ALERT_DANGER, '', [])
@@ -107,47 +106,64 @@ export const getCustomerDetails = async (req, res) => {
 
 export const updateCustomer = async (req, res) => {
     try {
-        const _id = req.params.id
-        const { firstName, lastName, email, password, userName, phone } = req.body
+        const _id = req.params.id;
+        const { firstName, lastName, email, password, userName, phone } = req.body;
         const userRole = await Role.findOne({ roleName: 'User' });
 
-        const filePath = JSON.parse(JSON.stringify(req.file))
-
-        const fileName = `${process.env.HOST_URL}/${filePath.path}`
-
+        // Find existing user
         const existingUser = await User.findById(_id);
 
-        if (existingUser) {
-            existingUser.firstName = firstName
-            existingUser.email = email
-            existingUser.lastName = lastName
-            existingUser.phone = phone
-            existingUser.password = password
-            existingUser.userName = userName
-            existingUser.isBlocked = false
-            existingUser.role = userRole._id,
-                existingUser.profileImage = fileName
-
-            await existingUser.save();
-            return res.status(200).render('admin/customers/update', { alertMessage: 'User Updated successfully', alertType: 'success', redirectUrl: '/api/customer', user: existingUser })
+        if (!existingUser) {
+            return res.status(404).render('admin/customers/update', { 
+                alertMessage: 'User Not found', 
+                alertType: 'warning', 
+                redirectUrl: '', 
+                user: existingUser 
+            });
         }
 
-        res.status(404).render('admin/customers/update', { alertMessage: 'User Not found', alertType: 'warnning', redirectUrl: '', user: existingUser });
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).render('admin/customers/update', { alertMessage: 'Internal server error', alertType: 'success', redirectUrl: '', user: [] });
-    }
+        // Update fields if they exist
+        existingUser.firstName = firstName;
+        existingUser.email = email;
+        existingUser.lastName = lastName;
+        existingUser.phone = phone;
+        existingUser.password = password;
+        existingUser.userName = userName;
+        existingUser.isBlocked = false;
+        existingUser.role = userRole._id;
 
-}
+        if (req.file) {
+            const filePath = JSON.parse(JSON.stringify(req.file));
+            existingUser.profileImage = `${process.env.HOST_URL}/${filePath.path}`;
+        }
+
+        await existingUser.save();
+        return res.status(200).render('admin/customers/update', { 
+            alertMessage: 'User Updated successfully', 
+            alertType: 'success', 
+            redirectUrl: '/admin/customers', 
+            customers: existingUser 
+        });
+
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).render('admin/customers/update', { 
+            alertMessage: 'Internal server error', 
+            alertType: 'danger', 
+            redirectUrl: '', 
+            customers: [] 
+        });
+    }
+};
+
 
 export const toggleUserBlockStatus = async (req, res) => {
     try {
         const user_id = req.params.id
-        const status = req.params.status
         const user = await User.findById(user_id);
 
         if (user) {
-            user.isBlocked = status
+            user.isBlocked = !user.isBlocked
             user.save()
             return res.status(200).json({ message: "User Status Updated successfully" })
         }
@@ -164,7 +180,7 @@ export const deleteCustomer = async (req, res) => {
         const user = await User.findById(user_id);
         if (user) {
             const delte = await User.deleteOne({ _id: user_id })
-            return res.status(200).json({ message: 'User Deleted successfully', redirect: '/api/customer' });
+            return res.status(200).json({ message: 'User Deleted successfully', redirect: '/admin/customers' });
         }
     } catch (error) {
         res.status(500).send('Internal Server Error')

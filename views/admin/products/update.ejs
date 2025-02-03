@@ -474,7 +474,6 @@
 
                 if (input.files.length === 0) {
                     const image = "<%= data.images[3] %>"
-                    console.log('image', image)
                     if (index === 0) {
                         document.getElementById('product_image1_hidden').value = `<%= data.images[0] %>`;
                     } else if (index === 1) {
@@ -518,7 +517,7 @@
                     } else {
                         if (alertMessageDiv) {
                             alertMessageDiv.classList.add('alert')
-                            console.log(typeof(data.message))
+
                             if (typeof(data.message === Object)){
                                 alertMessageDiv.innerHTML = JSON.stringify(data.message) 
                             }else{

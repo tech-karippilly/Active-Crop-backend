@@ -71,6 +71,7 @@ async function googleLogin(req, res) {
         if (user.isBlocked){
             return renderPage(res, HTTP_FORBIDDEN, USER_LOGIN_PAGE, 'Access Denied Please contact admin', ALERT_DANGER, '/auth/login')
         }
+
         const accessToken = jwt.sign(
             { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET_ACCESS_TOKEN,

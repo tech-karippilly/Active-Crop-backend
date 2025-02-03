@@ -29,9 +29,8 @@ route.get(ADMIN_CUSTOMER_LIST, getCoustomers)
 route.get(ADMIN_UPDATE_CUSTOMER, updateCustomerPage)
 route.post('/:id',upload.single('profile_image'),updateCustomer)
 
-// route.patch('/:id/:status',toggleUserBlockStatus)
-
-// route.delete('/:id',deleteCustomer)
+route.patch('/:id',toggleUserBlockStatus)
+route.delete('/:id',deleteCustomer)
 
 
 

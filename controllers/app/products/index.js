@@ -19,7 +19,7 @@ async function productsPage(req,res) {
 
         res.status(HTTP_SUCCESS).render(USER_PRODUCT_PAGE,{isLogin:false,products,catagories,activeCata:id,currentUser:{}})
     }catch(error){
-        console.log(error.message)
+
     }
 }
 
@@ -56,7 +56,7 @@ async function productDetailsPage(req,res){
         currentUser:{}
     })
     }catch(error){
-        console.log(error.message)
+
     }
 }
 

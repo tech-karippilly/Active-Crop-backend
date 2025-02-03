@@ -21,13 +21,7 @@
 </head>
 
 <body>
-    <div class="alert-box" id="alert-box">
-        <% if (alertMessage) { %>
-            <div class="alert alert-<%= alertType %>" id="alert">
-                <%= alertMessage %>
-            </div>
-            <% } %>
-    </div>
+
 
     <div class="main-container">
         <section class="side-bar">
@@ -65,7 +59,13 @@
             </div>
         </section>
         <section class="container-section p-5  w-100">
-
+            <div class="alert-box" id="alert-box">
+                <% if (alertMessage) { %>
+                    <div class="alert alert-<%= alertType %>" id="alert">
+                        <%= alertMessage %>
+                    </div>
+                    <% } %>
+            </div>
             <div class="container-fluid  w-100">
                 <div>
                     <h1>List of Customers</h1>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <button class="btn button-style"
-                            onclick="window.location.href='/api/customer/create-customer'">Create Customer</button>
+                            onclick="window.location.href='/admin/customers/create-customer'">Create Customer</button>
                     </div>
                 </div>
                 <table class="table table-bordered table-hover">
@@ -92,6 +92,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>User Name</th>
                             <th>Phone</th>
                             <th>Actions</th>
                         </tr>
@@ -101,10 +102,11 @@
                             <tr>
                                 <td><%= customer.firstName %> <%= customer.lastName %></td>
                                 <td><%= customer.email %></td>
+                                <td><%=customer.userName  %></td>
                                 <td><%= customer.phone %></td>
                                 <td>
                                     
-                                    <a href="/api/customer/<%= customer._id %>"   class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="/admin/customers/<%= customer._id %>"   class="btn btn-primary btn-sm">Edit</a>
                                     <a  class="btn btn-danger btn-sm" onclick="deleteUser('<%= customer._id %>')">Delete</a>
                                     <a href="#" id="blockBtn-<%= customer._id %>" class="btn btn-warning btn-sm" onclick="blockUser('<%= customer._id %>', `<%= customer.isBlocked %>`)">
                                         <i class="fas <%= customer.isBlocked ? 'fa-unlock' : 'fa-ban' %>"></i> <%= customer.isBlocked ? 'Unblock' : 'Block' %>
@@ -142,7 +144,7 @@
             }
 
             try {
-                const response = await fetch(`/api/customer/${userId}`, {
+                const response = await fetch(`/admin/customers/${userId}`, {
                     method: 'delete',
                     headers: {
                         'Content-Type': 'application/json'
@@ -184,7 +186,7 @@
             }
 
             try {
-                const response = await fetch(`/api/customer/${userId}/${!status}`, {
+                const response = await fetch(`/admin/customers/${userId}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'

@@ -118,9 +118,7 @@ export const updateProduct = async (req, res) => {
         const productDetails = await Product.findById(product_id);
 
         const isProductFormValid = productFormValid(product_name, price, stock_quantity)
-        console.log(isProductFormValid)
-        const catagoerys = await Categoery.find({})
-        const activeCatagoery = await Categoery.findById(productDetails.catagoery_id)
+
         if (isProductFormValid !== true) {
             return res.status(400).json({ message: isProductFormValid, status: 400 })
             
@@ -152,7 +150,7 @@ export const updateProduct = async (req, res) => {
         }
         res.status(404).json({ message: 'Product not found', statis: 404 })
     } catch (error) {
-        console.log(error.message)
+
         res.status(500).json({ message: "Internal Server Error", status: 500 })
     }
 }
