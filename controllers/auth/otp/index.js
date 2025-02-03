@@ -18,6 +18,7 @@ async function sendOtp(req, res) {
 
     
         let otp = otpGenerator.generate(6, {
+            digits:true,
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
@@ -26,6 +27,7 @@ async function sendOtp(req, res) {
         let result = OTPModel.findOne({ otp: otp })
         while (result) {
             otp = otpGenerator.generate(6, {
+                digits:true,
                 upperCaseAlphabets: false,
             })
             result = await OTPModel.findOne({ otp: otp });
@@ -55,6 +57,7 @@ async function resendOtp(req, res) {
         }
 
         let otp = otpGenerator.generate(6, {
+            digits:true,
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
@@ -63,6 +66,7 @@ async function resendOtp(req, res) {
         let result = OTPModel.findOne({ otp: otp })
         while (result) {
             otp = otpGenerator.generate(6, {
+                digits:true,
                 upperCaseAlphabets: false,
             })
             result = await OTPModel.findOne({ otp: otp });
