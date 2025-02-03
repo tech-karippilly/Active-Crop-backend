@@ -130,6 +130,8 @@ span {
 }
 
 .footet-container {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     min-height: 20vh;
     background-color: #E5E8E8 ;
@@ -183,7 +185,6 @@ span {
 }
 
 .footer-condent {
-    position: relative;
     padding: 10px;
     max-height: auto;
     display: flex;
